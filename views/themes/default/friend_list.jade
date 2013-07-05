@@ -1,0 +1,15 @@
+#chat-friends.tab-pane
+	.conversation-header
+		p 我的好友
+	.chat-f-search
+		input.input-medium.search-query(type="text",placeholder="搜索好友")
+			i.icon-search
+	.conversation-content
+		ul.unstyled
+		for friend in friends
+			li(onclick="chatWithFriend(#{friend.uid})")
+				img.avatar(src="#{IMGURL}#{friend.avatar1}")
+				label #{friend.uname}
+				for unmsg in unread
+					- if(friend.uid==unmsg.uid)
+						b (#{unmsg.count})

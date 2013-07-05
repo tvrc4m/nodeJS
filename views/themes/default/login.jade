@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	form(action='/nodejs/login',method='POST')
+		div
+			label email
+			input.text(type="text",name="email")
+		div
+			lable password
+			input.text(type="password",name="password")
+		div
+			input.button(type="submit",value="submit")
+

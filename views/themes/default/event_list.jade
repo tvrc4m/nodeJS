@@ -1,0 +1,9 @@
+#chat-events.tab-pane
+	.conversation-header
+		p 我的活动
+	.conversation-content
+		ul.unstyled
+			for event in events
+				li(onclick="chatWithEvent(#{event.id})")
+					img.avatar(src="#{IMGURL}#{event.coverimg}")
+					label #{event.title}

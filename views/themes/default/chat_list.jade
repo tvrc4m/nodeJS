@@ -1,0 +1,20 @@
+extends window
+block tab-content
+	#chat-conversation.tab-pane
+		.conversation-header
+			p 当前讨论组
+		.conversation-content
+			ul.unstyled
+				for session in sessions
+					-if(session.type=='private')
+						li(onclick="chatWithFriend(#{session.id})")
+							img.avatar(src="#{IMGURL}{session.pic}")
+							label #{session.name}
+							span #{session.name}
+							i.icon-remove-sign.icon-large
+					-else
+						li(onclick="chatWithEvent(#{session.id})")
+							img.avatar(src="#{IMGURL}{session.pic}")
+							label #{session.name}
+							span #{session.name}
+							i.icon-remove-sign.icon-large

@@ -1,0 +1,33 @@
+.chat-profile-event
+	img.avatar(src="http://pics.julejie.com/#{current.avatar1}")
+	label
+		a(href="#") 爬崂山
+	span
+		a(href="#") #{current.uname}
+
+.chat-dialogbox
+	.chat-dialogbox-chatting
+		.history
+			span
+				i.icon-time
+				a.sub-link(href="#") 查看更早聊天记录
+		ul.unstyled
+			for history in histories
+				li
+					img.avatar(src="#{IMGURL}#{history.avatar}")
+					label
+						a(href="#") #{history.uname}
+						label #{history.ctime}
+					span #{history.content}
+
+	.chat-dialogbox-faces-list
+		ul.unstyled
+			
+.chat-inputbox
+	input#input-picture(type="button")
+		i.icon-cus-pic
+	input#input-faces(type="button")
+		i.icon-cus-faces
+
+	input#input-text(type="text",placeholder="聊天输入..")
+	input#input-submit(type="button",value="发送")

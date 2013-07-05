@@ -1,0 +1,17 @@
+{
+  "auth": {
+  },
+  "theme": {
+    "name" : "default"
+  },
+  "session" : {
+    "key":"julejie-session",
+    "secret" : "julejie001"
+  },
+  "login":{
+    "callback":"/login"
+  },
+  "app": {
+    "port": 6789
+  }
+}
