@@ -1,0 +1,49 @@
+extends header
+block content
+	.chat-window-tmp
+			.chat-header
+				h5 聊天
+				.chat-close
+					i.icon-remove.icon-large
+			.chat-viewbox
+				.chat-content
+					.chat-profile
+						img.avatar(src="http://pics.julejie.com/#{userinfo.avatar1}")
+						span
+							a(href="/user/#{userinfo.uid}") #{userinfo.uname}
+
+					.chat-blank-line
+					ul#chat-tab-v.nav.nav-tabs
+						li
+							a(href='javascript:void(0);',data-toggle="tab",onclick="sessionChannel(this)")
+								i.icon-comment.icon-2x
+						li.active
+							a(href="javascript:void(0);",data-toggle="tab",onclick="friendChannel(this)")
+								i.icon-user.icon-2x
+						li
+							a(href="javascript:void(0);",data-toggle="tab",onclick="eventChannel(this)")
+								i.icon-flag.icon-2x
+					.clear
+					.tab-content
+						#chat-conversation.tab-pane.hide
+							.conversation-header
+								p 当前讨论组
+							.conversation-content
+						#chat-friends.tab-pane.active
+							.conversation-header
+								p 我的好友
+							.chat-f-search
+								input.input-medium.search-query(type="text",placeholder="搜索好友")
+								i.icon-search
+							.conversation-content
+								ul.unstyled
+									for friend in friends
+										li(class="friendchannel_#{friend.uid}",onclick="chatWithFriend(#{friend.uid},'#{friend.uname}')")
+											img.avatar(src="#{friend.avatar1}")
+											label #{friend.uname}
+												em.hide (0)
+						
+						#chat-events.tab-pane.hide
+							.conversation-header
+								p 我的活动
+							.conversation-content
