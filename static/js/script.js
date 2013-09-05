@@ -6,5 +6,5 @@ socket.on('error', function (reason){
 });
   
 socket.on('connect', function (){
-  socket.emit('new private msg notice')
+  socket.emit('user.login');
 });

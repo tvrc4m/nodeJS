@@ -67,8 +67,6 @@ app.all('*',function(req,res){
   });
 });
 
-
-
 /*
  * Web server
  */
@@ -81,7 +79,7 @@ global.server=exports.server = http.createServer(app).listen(app.get('port'), fu
  * Socket.io
  */
 
-//require('./core/sockets');
+require('./core/socket');
 
 /*
  * Catch uncaught exceptions

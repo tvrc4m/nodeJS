@@ -7,6 +7,8 @@ global.MEDIUM=ROOT+"/medium/";
 
 global.ACTION=ROOT+"/action/";
 
+global.SOCKET=ROOT+"/socket/";
+
 global.VIEW=ROOT+"/view/";
 
 global.STATIC=ROOT+"/static/";
