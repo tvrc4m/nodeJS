@@ -11,5 +11,4 @@ exports=module.exports=function(socket,user){
 	socket.on('chat.message.receive',function(data){
 
 	});
-	
 }
