@@ -5,6 +5,8 @@ exports.mysql=MysqlModel;
 
 exports.redis=RedisModel;
 
+exports.sphinx=SphinxModel;
+
 var EventEmitter = require('events').EventEmitter;
 
 var db=require('./db.js');
@@ -82,4 +84,22 @@ MysqlModel.prototype.set=function(params){
 	else
 		throw 'this.table undifined';
 	return params;
+}
+
+function SphinxModel(){
+	this.db=new db.sphinx();
+}
+
+SphinxModel.prototype.__proto__=Model.prototype;
+
+SphinxModel.prototype.find=function(){
+	
+}
+
+SphinxModel.prototype.add=function(sign,data,params){
+	this.db.add(sign,data,params);
+}
+
+SphinxModel.prototype.run=function(fn){
+	this.db.run(fn);
 }

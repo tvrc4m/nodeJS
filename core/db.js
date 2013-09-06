@@ -158,63 +158,67 @@ MysqlDB.prototype.sql=function(params,fn){
 	fn(sql);
 }
 
+var queries=[];
+
 function SphinxDB(){
 	DB.call(this);
-	this.queries=[];
+	this.link=new require('sphinxapi')()();
 }
 
 SphinxDB.prototype.__proto__=DB.prototype;
 
 SphinxDB.prototype.init=function(){
-	this._host			= 'localhost';	
-	this._port			= 9312;
-	this._offset		= 0;
-	this._limit			= 20;
-	this._mode			= SphinxClient.SPH_MATCH_ALL;	
-	this._sort			= SphinxClient.SPH_SORT_RELEVANCE;
-	this._sortby		= '';			
-	this._min_id		= 0;
-	this._max_id		= 0;
-	this._filters		= [];
-	this._groupby		= '';
-	this._groupfunc		= SphinxClient.SPH_GROUPBY_DAY;
-	this._groupsort		= '@group desc';
-	this._groupdistinct	= '';
-	this._maxmatches	= 3000;
-	this._cutoff		= 0;
-	this._retrycount	= 0;
-	this._retrydelay	= 0;
-	this._anchor		= {};
-	this._indexweights	= {};
-	this._ranker		= SphinxClient.SPH_RANK_PROXIMITY_BM25;
-	this._rankexpr		= '';
-	this._maxquerytime	= 0;
-	this._timeout		= 1.0;
-	this._fieldweights	= {};
-	this._overrides		= {};
-	this._select		= '*';
+	this.link._host			= 'localhost';	
+	this.link._port			= 9312;
+	this.link._offset		= 0;
+	this.link._limit			= 20;
+	this.link._mode			= this.link.SPH_MATCH_ALL;	
+	this.link._sort			= this.link.SPH_SORT_RELEVANCE;
+	this.link._sortby		= '';			
+	this.link._min_id		= 0;
+	this.link._max_id		= 0;
+	this.link._filters		= [];
+	this.link._groupby		= '';
+	this.link._groupfunc		= this.link.SPH_GROUPBY_DAY;
+	this.link._groupsort		= '@group desc';
+	this.link._groupdistinct	= '';
+	this.link._maxmatches	= 3000;
+	this.link._cutoff		= 0;
+	this.link._retrycount	= 0;
+	this.link._retrydelay	= 0;
+	this.link._anchor		= {};
+	this.link._indexweights	= {};
+	this.link._ranker		= this.link.SPH_RANK_PROXIMITY_BM25;
+	this.link._rankexpr		= '';
+	this.link._maxquerytime	= 0;
+	this.link._timeout		= 1.0;
+	this.link._fieldweights	= {};
+	this.link._overrides		= {};
+	this.link._select		= '*';
 }
 
 SphinxDB.prototype.run=function(fn){
-	data=this.RunQueries();
-	var results=null;
-	for(key in data) results[this.queries[key]]=data[key];
-	fn(results);
+	this.link.RunQueries(function(err, data){
+		var results={};
+		console.log(data);
+		for(var key in data) results[queries[key]]=data[key];
+		fn(results);
+	});
 }
 
 SphinxDB.prototype.add=function(sign,data,params){
 	this.init();
-	this.queries.push(sign);
+	queries.push(sign);
 	for(param in params){
-		if(!Object.hasOwnProperty.call(this,param)) throw '请检查此属性是否存在';
+		if(!Object.hasOwnProperty.call(this.link,param)) throw '请检查此属性是否存在';
 		this[param]=params[param];
 	}
 	var query='';
 	if(typeof(data)=='object'){
-		for(key in data) data[key] || query+=!key?' '+data[key]+' ':' '+key+' '+data[key]+' ';
+		for(var key in data) data[key] || query+=!key?' '+data[key]+' ':' '+key+' '+data[key]+' ';
 	}else if(typeof(data)=='string') 
 		query=data;
-	this.AddQuery(query);
+	this.link.AddQuery(query);
 }
 
 SphinxDB.prototype.resetParams=function(param,fn){

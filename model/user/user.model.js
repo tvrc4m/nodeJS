@@ -6,6 +6,8 @@ exports.redis=UserRedis;
 
 exports.mysql=UserMysql;
 
+exports.sphinx=UserSphinx;
+
 
 function UserMongo(){
 	model.mongodb.call(this);
@@ -58,3 +60,13 @@ UserMysql.prototype.on('update.user.info',function(uid){
 	console.log(356467);
 })
 
+function UserSphinx(){
+	model.sphinx.call(this);
+	this._index='tbcatindex';
+}
+
+UserSphinx.prototype.__proto__=model.sphinx.prototype;
+
+UserSphinx.prototype.getUser=function(sign,fn){
+	this.add(sign);
+}

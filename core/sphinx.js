@@ -97,7 +97,6 @@ function SphinxClient() {
 	if (!(this instanceof SphinxClient)) {
 		return new SphinxClient()
 	}
-
 	this._host			= 'localhost'					// searchd host (default is "localhost")
 	this._port			= 9312							// searchd port (default is 9312)
 	this._path			= null							// searchd unix-domain socket path
@@ -128,6 +127,8 @@ function SphinxClient() {
 	this._fieldweights	= {}							// per-field-name weights
 	this._overrides		= {}							// per-query attribute values overrides
 	this._select		= '*'							// select-list (attributes or expressions, with optional aliases)
+	this._index 		='*';							//@tvrc4m:add
+	this._query 		=[];
 
 	this._error			= ''							// last error message
 	this._warning		= ''							// last warning message
@@ -208,7 +209,7 @@ SphinxClient.prototype._SendRequest = function (client_ver, request, fn) {
         }
       );
 			client_say('sending a request', request.toString());
-//      process.stdout.write(request.toString('hex')+'\n')
+			//      process.stdout.write(request.toString('hex')+'\n')
 			client.write(request);
     }
   );
@@ -243,226 +244,13 @@ SphinxClient.prototype.SetServer = function (host, port) {
 	self._host = host;
 	self._port = port;
 };
-SphinxClient.prototype.SetConnectTimeout = function (timeout ) {
-  var self = this
-	assert.equal(typeof timeout, 'number')
-	self._timeout = Math.max(0.001, timeout);
-};
-SphinxClient.prototype.SetLimits = function (offset, limit, maxmatches, cutoff) {
-  var self = this
-	assert.equal(typeof offset, 'number')
-	assert.equal(typeof limit, 'number')
-	assert(0 <= offset < 16777216)
-	assert(0 <= limit < 16777216)
-	if (maxmatches === undefined) {
-		maxmatches = 0
-	}
-	if (cutoff === undefined) {
-		cutoff = 0
-	}
-	assert(maxmatches >= 0)
-	self._offset = offset
-	self._limit = limit
-	if (maxmatches > 0) {
-		self._maxmatches = maxmatches
-	}
-	if (cutoff >= 0) {
-		self._cutoff = cutoff
-	}
-};
-SphinxClient.prototype.SetMaxQueryTime = function (maxquerytime) {
-  var self = this
-	assert.equal(typeof maxquerytime, 'number')
-	assert(maxquerytime > 0)
-	self._maxquerytime = maxquerytime
-};
-SphinxClient.prototype.SetMatchMode = function (mode) {
-  var self = this
-	var modes = [SphinxClient.SPH_MATCH_ALL, SphinxClient.SPH_MATCH_ANY, SphinxClient.SPH_MATCH_PHRASE, SphinxClient.SPH_MATCH_BOOLEAN, SphinxClient.SPH_MATCH_EXTENDED, SphinxClient.SPH_MATCH_FULLSCAN, SphinxClient.SPH_MATCH_EXTENDED2]
-	assert(modes.some(function (x) { return (x === mode) }))
-	self._mode = mode
-};
-SphinxClient.prototype.SetRankingMode = function (ranker, rankexpr) {
-  var self = this
-  if (rankexpr === undefined) {
-    rankexpr = ''
-  }
-	assert(0 <= ranker && ranker < SphinxClient.SPH_RANK_TOTAL)
-	self._ranker = ranker
-	self._rankexpr = rankexpr
-};
-SphinxClient.prototype.SetSortMode = function (mode, clause) {
-  var self = this
-  var modes = [SphinxClient.SPH_SORT_RELEVANCE, SphinxClient.SPH_SORT_ATTR_DESC, SphinxClient.SPH_SORT_ATTR_ASC, SphinxClient.SPH_SORT_TIME_SEGMENTS, SphinxClient.SPH_SORT_EXTENDED, SphinxClient.SPH_SORT_EXPR]
-  if (clause === undefined) {
-    clause = ''
-  }
-  assert(modes.some(function (x) { return (x === mode) }))
-	assert.equal(typeof clause, 'string')
-  self._sort = mode
-  self._sortby = clause
-};
-SphinxClient.prototype.SetWeights = function (weights) {
-  var self = this
-	assert(Array.isArray(weights))
-	forEach(weights, function (item, index) {
-			assert.equal(typeof item, 'number')
-	})
-	self._weights = weights
-};
-SphinxClient.prototype.SetFieldWeights = function (weights) {
-  var self = this
-	assert.equal(typeof weights, 'object')
-	forEach(weights, function (item, index) {
-			assert.equal(typeof item, 'number')
-	})
-	self._fieldweights = weights
-};
-SphinxClient.prototype.SetIndexWeights = function (weights) {
-  var self = this
-	assert.equal(typeof weights, 'object')
-	forEach(weights, function (item, index) {
-			assert.equal(typeof item, 'number')
-	})
-	self._indexweights = weights
-};
-SphinxClient.prototype.SetIDRange = function (minid, maxid) {
-  var self = this
-	assert.equal(typeof minid, 'number')
-	assert.equal(typeof maxid, 'number')
-	assert(minid <= maxid)
-	self._min_id = minid
-	self._max_id = maxid
-};
-SphinxClient.prototype.SetFilter = function (attribute, values, exclude) {
-  var self = this
-  if (exclude === undefined) {
-    exclude = 0
-  }
-	assert.equal(typeof attribute, 'string')
-	forEach(values, function (item, index) {
-			assert.equal(typeof item, 'number')
-	})
-	self._filters.push({
-			'type': SphinxClient.SPH_FILTER_VALUES,
-			'attr': attribute,
-			'exclude': exclude,
-			'values': values
-		})
-  };
-SphinxClient.prototype.SetFilterRange = function (attribute, min_, max_, exclude) {
-    var self = this
-    if (exclude === undefined) {
-      exclude = 0
-    }
-    assert.equal(typeof attribute, 'string')
-    assert.equal(typeof min_, 'number')
-    assert.equal(typeof max_, 'number')
-    assert(min_<=max_)
 
-    self._filters.push({
-        'type': SphinxClient.SPH_FILTER_RANGE
-        , 'attr': attribute
-        , 'exclude': exclude
-        , 'min': min_
-        , 'max': max_
-      } )
-  }
-
-SphinxClient.prototype.SetFilterFloatRange = function (attribute, min_, max_, exclude) {
-    var self = this
-    if (exclude === undefined) {
-        exclude = 0
-    }
-    assert.equal(typeof attribute, 'string')
-    assert.equal(typeof min_, 'number')
-    assert.equal(typeof max_, 'number')
-    assert(min_<=max_)
-
-    self._filters.push({
-        'type': SphinxClient.SPH_FILTER_FLOATRANGE,
-        'attr': attribute,
-        'exclude': exclude,
-        'min': min_,
-        'max': max_
-    } )
-}
-
-SphinxClient.prototype.SetGeoAnchor = function (attrlat, attrlong, latitude, longitude) {
-  var self = this
-	assert.equal(typeof attrlat, 'string')
-	assert.equal(typeof attrlong, 'string')
-	assert.equal(typeof latitude, 'number')
-	assert.equal(typeof longitude, 'number')
-	self._anchor['attrlat'] = attrlat
-	self._anchor['attrlong'] = attrlong
-	self._anchor['lat'] = latitude
-	self._anchor['long'] = longitude
-};
-SphinxClient.prototype.SetGroupBy = function (attribute, func, groupsort ) {
-  var self = this
-	if (groupsort == undefined) groupsort = '@group desc';
-	assert.equal(typeof attribute, 'string')
-	assert.equal(typeof groupsort, 'string')
-	var funcs = [SphinxClient.SPH_GROUPBY_DAY, SphinxClient.SPH_GROUPBY_WEEK, SphinxClient.SPH_GROUPBY_MONTH, SphinxClient.SPH_GROUPBY_YEAR, SphinxClient.SPH_GROUPBY_ATTR, SphinxClient.SPH_GROUPBY_ATTRPAIR]
-	assert(funcs.some(function (x) { return (x === func) }))
-	self._groupby = attribute
-	self._groupfunc = func
-	self._groupsort = groupsort
-};
-SphinxClient.prototype.SetGroupDistinct = function (attribute) {
-  var self = this
-	assert.equal(typeof attribute, 'string')
-	self._groupdistinct = attribute
-};
-SphinxClient.prototype.SetRetries = function (count, delay) {
-  var self = this
-	if (delay == undefined) delay = 0;
-	assert.equal(typeof count, 'number')
-	assert.equal(typeof delay, 'number')
-	assert(count >= 0)
-	assert(delay >= 0)
-	self._retrycount = count
-	self._retrydelay = delay
-};
-SphinxClient.prototype.SetOverride = function (name, type, values) {
-  var self = this
-	assert.equal(typeof name, 'string')
-	assert(SphinxClient.SPH_ATTR_TYPES.some(function (x) { return (x === type) }))
-	assert.equal(typeof values, 'object')
-	self._overrides[name] = {
-		'name': name,
-		'type': type,
-		'values': values
-	}
-};
-SphinxClient.prototype.SetSelect = function (select) {
-  var self = this
-	assert.equal(typeof select, 'string')
-	self._select = select
-};
-SphinxClient.prototype.ResetOverrides = function () {
-  var self = this
-	self._overrides = {}
-};
-SphinxClient.prototype.ResetFilters = function () {
-  var self = this
-	self._filters = []
-	self._anchor = {}
-};
-SphinxClient.prototype.ResetGroupBy = function () {
-  var self = this
-	self._groupby = ''
-	self._groupfunc = SphinxClient.SPH_GROUPBY_DAY
-	self._groupsort = '@group desc'
-	self._groupdistinct = ''
-};
 /**
 * Connect to searchd server and run given search query.
 *
 * @api public
 */
-SphinxClient.prototype.Query = function (query, index, comment, fn) {
+SphinxClient.prototype.Query = function (query, comment, fn) {
   var self = this
 	if (arguments.length == 2) {
 		fn = arguments[1];
@@ -473,7 +261,7 @@ SphinxClient.prototype.Query = function (query, index, comment, fn) {
 		fn = arguments[2];
 		comment = '';
 	}
-	self.AddQuery(query, index, comment)
+	self.AddQuery(query, comment)
 
 	self.RunQueries(function (err, results) {
 			self._reqs = [] // we won't re-run erroneous batch
@@ -501,9 +289,9 @@ SphinxClient.prototype.Query = function (query, index, comment, fn) {
 *
 * @api public
 */
-SphinxClient.prototype.AddQuery = function (query, index, comment) {
-  var self = this
-	if (index === undefined) index = '*';
+SphinxClient.prototype.AddQuery = function (query, comment) {
+  var self = this;
+  	var index=this._index;
 	if (comment === undefined) comment = '';
 	assert.equal(typeof query, 'string');
 	var req = []
@@ -674,17 +462,17 @@ SphinxClient.prototype.RunQueries = function (fn) {
 			var result = {}
 			results.push(result)
 
-			result['error'] = ''
-			result['warning'] = ''
-			result['status'] = unpack('>L', response.slice(p, p + 4))
+			//result['error'] = ''
+			//result['warning'] = ''
+			var status = unpack('>L', response.slice(p, p + 4))
 			p += 4
-			if (result['status'] != SphinxClient.SEARCHD_OK) {
+			if (status != SphinxClient.SEARCHD_OK) {
 				length = Number(unpack('>L', response.slice(p, p + 4)))
 				p += 4
         var message = response.slice(p, p+length)
 				p += length
 
-				if (result['status'] == SphinxClient.SEARCHD_WARNING) {
+				if (status == SphinxClient.SEARCHD_WARNING) {
 					result['warning'] = message.toString()
 				}
 				else {
@@ -693,7 +481,7 @@ SphinxClient.prototype.RunQueries = function (fn) {
 				}
 			}
 			// read schema
-			result['fields'] = []
+			//result['fields'] = []
 			var attrs = []
 
 			var nfields = Number(unpack('>L', response.slice(p, p + 4)))
@@ -702,7 +490,7 @@ SphinxClient.prototype.RunQueries = function (fn) {
 				nfields -= 1
 				length = Number(unpack('>L', response.slice(p, p + 4)))
 				p += 4
-				result['fields'].push(response.slice(p, p + length).toString())
+				//result['fields'].push(response.slice(p, p + length).toString())
 				p += length
 			}
 
@@ -728,7 +516,7 @@ SphinxClient.prototype.RunQueries = function (fn) {
 			p += 4
 
 			// read matches
-			result['matches'] = []
+			result['value'] = []
 			while (count>0 && p<max_) {
 				var doc, weight
 				count -= 1
@@ -794,20 +582,20 @@ SphinxClient.prototype.RunQueries = function (fn) {
 					}
 					p += 4
 				}
-				result['matches'].push( match )
+				result['value'].push( match )
 			}
 			result['total'] = Number(unpack('>L', response.slice(p, p + 4)))
 			p += 4
-			result['total_found'] = Number(unpack('>L', response.slice(p, p + 4)))
+			//result['total_found'] = Number(unpack('>L', response.slice(p, p + 4)))
 			p += 4
-			result['time'] = Number(unpack('>L', response.slice(p, p + 4)))
+			//result['time'] = Number(unpack('>L', response.slice(p, p + 4)))
 			p += 4
 			var words = Number(unpack('>L', response.slice(p, p + 4)))
 			p += 4
 
-			result['time'] = (result['time']/1000.0)
+			//result['time'] = (result['time']/1000.0)
 
-			result['words'] = []
+			//result['words'] = []
 			while (words>0) {
 				words -= 1
 				var length = Number(unpack('>L', response.slice(p, p + 4)))
@@ -819,17 +607,17 @@ SphinxClient.prototype.RunQueries = function (fn) {
 				var hits = Number(unpack('>L', response.slice(p, p + 4)))
 				p += 4
 
-				result['words'].push({'word':word, 'docs':docs, 'hits':hits})
+				//result['words'].push({'word':word, 'docs':docs, 'hits':hits})
 			}
+			delete result.attrs;
 		}
 		self._reqs = []
 
 		fn(err, results)
 	})
 };
-SphinxClient.prototype.BuildExcerpts = function (docs, index, words, opts, cb) {
+SphinxClient.prototype.BuildExcerpts = function (docs, words, opts, cb) {
 	assert.equal(Array.isArray(docs), true);
-	assert.equal(typeof index, 'string');
 	assert.equal(typeof words, 'string');
 	if (opts) {
 		assert.equal(typeof opts, 'object');
@@ -873,7 +661,7 @@ SphinxClient.prototype.BuildExcerpts = function (docs, index, words, opts, cb) {
 	var req = [];
 
 	req.push(pack('>LL', [ 0, flags ]));
-	req.push(pack('>L', [len(index)]), index);
+	req.push(pack('>L', [len(this._index)]), this._index);
 	req.push(pack('>L', [len(words)]), words);
 
 	req.push(pack('>L', [len(opts.before_match)]), opts.before_match);

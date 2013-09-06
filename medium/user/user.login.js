@@ -13,10 +13,10 @@ exports.uname=function(option,fn){
 exports.phone=function(option,fn){
 	var phone=option.phone,password=option.password;
 	MU('user',function(m_user){
-		var mm_user=new m_user.mongodb();
-		mm_user.getUserByPhone(phone,function(res){
-			if(res.password==password) fn(1);
-			else fn(0);
+		var mm_user=new m_user.sphinx();
+		mm_user.getUser();
+		mm_user.run(function(res){
+			console.log(res);
 		})
 	})
 }
