@@ -12,3 +12,4 @@ UserSetting.prototype.__proto__=controller.prototype;
 UserSetting.prototype.index=function(){
 	this.display('error');
 }
+
