@@ -6,5 +6,5 @@ socket.on('error', function (reason){
 });
   
 socket.on('connect', function (){
-  socket.emit('user.login');
+  socket.emit('user.login',{uid:34234});
 });

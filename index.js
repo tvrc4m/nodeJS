@@ -7,9 +7,11 @@ require("./core/common.js");
 
 var express = require('express')
   , http = require('http')
+  //,https=require('https')
   , redis = require('redis')
   , RedisStore = require('connect-redis')(express)
-  , path=require('path');
+  , path=require('path')
+  //, fs=require('fs');
 
 /*
  * Instantiate redis
@@ -34,7 +36,7 @@ var app = exports.app = express();
 app.configure(function() {
   app.set('port', process.env.PORT || APP_PORT || 6789);
   app.set('view engine', 'jade'); 
-  app.set('views', ROOT + '/view/themes/' + APP_THEME);
+  app.set('views', VIEW+ APP_THEME);
   app.use(express.static(STATIC));
   app.use(express.bodyParser());
   app.use(express.cookieParser(SESSION_SECRET));
@@ -74,7 +76,18 @@ app.all('*',function(req,res){
 global.server=exports.server = http.createServer(app).listen(app.get('port'), function() {
   console.log('Balloons.io started on port %d', app.get('port'));
 });
+/*
+var options = {
+    key: fs.readFileSync('./openssl/privatekey.pem'),
+    cert: fs.readFileSync('./openssl/certificate.pem'),
+    requestCert:true,
+    rejectUnauthorized:false
+};
 
+global.server=exports.server = https.createServer(options,app).listen(app.get('port'), function() {
+  console.log('Balloons.io started on port %d', app.get('port'));
+});
+*/
 /*
  * Socket.io
  */

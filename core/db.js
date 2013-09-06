@@ -7,7 +7,7 @@ exports.redis=RedisDB;
 
 exports.mysql=MysqlDB;
 
-//exports.sphinx=SphinxDB;
+exports.sphinx=SphinxDB;
 
 function DB(){
 	this.link=null;
@@ -62,7 +62,6 @@ MongoDB.prototype.close=function(db){
 }
 
 function RedisDB(){
-	this.port=6379;
 	DB.call(this);
 }
 
@@ -157,4 +156,67 @@ MysqlDB.prototype.sql=function(params,fn){
 		sql+=' LIMIT '+params['limit'];
 	}
 	fn(sql);
+}
+
+function SphinxDB(){
+	DB.call(this);
+	this.queries=[];
+}
+
+SphinxDB.prototype.__proto__=DB.prototype;
+
+SphinxDB.prototype.init=function(){
+	this._host			= 'localhost';	
+	this._port			= 9312;
+	this._offset		= 0;
+	this._limit			= 20;
+	this._mode			= SphinxClient.SPH_MATCH_ALL;	
+	this._sort			= SphinxClient.SPH_SORT_RELEVANCE;
+	this._sortby		= '';			
+	this._min_id		= 0;
+	this._max_id		= 0;
+	this._filters		= [];
+	this._groupby		= '';
+	this._groupfunc		= SphinxClient.SPH_GROUPBY_DAY;
+	this._groupsort		= '@group desc';
+	this._groupdistinct	= '';
+	this._maxmatches	= 3000;
+	this._cutoff		= 0;
+	this._retrycount	= 0;
+	this._retrydelay	= 0;
+	this._anchor		= {};
+	this._indexweights	= {};
+	this._ranker		= SphinxClient.SPH_RANK_PROXIMITY_BM25;
+	this._rankexpr		= '';
+	this._maxquerytime	= 0;
+	this._timeout		= 1.0;
+	this._fieldweights	= {};
+	this._overrides		= {};
+	this._select		= '*';
+}
+
+SphinxDB.prototype.run=function(fn){
+	data=this.RunQueries();
+	var results=null;
+	for(key in data) results[this.queries[key]]=data[key];
+	fn(results);
+}
+
+SphinxDB.prototype.add=function(sign,data,params){
+	this.init();
+	this.queries.push(sign);
+	for(param in params){
+		if(!Object.hasOwnProperty.call(this,param)) throw '请检查此属性是否存在';
+		this[param]=params[param];
+	}
+	var query='';
+	if(typeof(data)=='object'){
+		for(key in data) data[key] || query+=!key?' '+data[key]+' ':' '+key+' '+data[key]+' ';
+	}else if(typeof(data)=='string') 
+		query=data;
+	this.AddQuery(query);
+}
+
+SphinxDB.prototype.resetParams=function(param,fn){
+
 }
