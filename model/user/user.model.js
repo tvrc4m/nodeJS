@@ -1,4 +1,5 @@
 var model=require(CORE+'model.js');
+var func=require(CORE+'function.js');
 
 exports.mongodb=UserMongo;
 
@@ -7,6 +8,7 @@ exports.redis=UserRedis;
 exports.mysql=UserMysql;
 
 exports.sphinx=UserSphinx;
+
 
 
 function UserMongo(){
@@ -34,6 +36,11 @@ UserMongo.prototype.updateUserByUid=function(uid,data,fn){
 
 UserMongo.prototype.findUsers=function(where,options,fn){
 	this.query({find:where,options:options},fn);
+}
+
+UserMongo.prototype.addUser=function(data,fn){
+	var timestamp=new Date().getTime(),def={ltime:timestamp,score:USER_DEFAULT_SCORE};
+	this.query({insert:func.extend({},def,data)},fn);
 }
 
 function UserRedis(){

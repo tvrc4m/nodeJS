@@ -13,6 +13,4 @@ exports=module.exports=function(socket,user){
 	socket.on('user.register.phone',function(data){
 		
 	});
-
-
 }

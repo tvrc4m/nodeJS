@@ -12,7 +12,7 @@ exports=module.exports=function(socket,user){
 
 	});;
 
-	socket.on('')
+	//socket.on('')
 
 
 }

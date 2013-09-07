@@ -37,7 +37,7 @@ MongoDB.prototype.query=function(params,fn){
 	var self=this;
 	self.connect(function(db){
 		var collection=db.collection(params['table']);
-		var callback=function(err,result){db.close();fn(result);}
+		var callback=function(err,result){db.close();err?fn(0):fn(result);}
 		for(param in params){
 			//if(Object.hasOwnProperty.call(collection,param)){
 				if(param=='findOne')
@@ -130,7 +130,6 @@ MysqlDB.prototype._set=function(params){
 		//if(!Object.hasOwnProperty.call(this.link,param)) throw '不存在此属性，可能有待添加';
 		//this.params[param]=params['param'];
 	}
-
 	return params;
 };
 

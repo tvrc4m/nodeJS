@@ -49,7 +49,8 @@ app.configure(function() {
 
 /**单入口路由**/
 
-app.all('*',function(req,res){
+app.all('*',function(req,res,next){
+  if(/socket\.io/.test(req.route.path)) next();
   var group=req.query.group || req.body.group || DEFAULT_GROUP;
   var action=req.query.app || req.body.app || DEFAULT_ACTION;
   var method=req.query.act || req.body.act || DEFAULT_METHOD;

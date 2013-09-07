@@ -37,11 +37,13 @@ io.sockets.on('connection',function(socket){
 	socket.join(user.uid);
 	var fs=require('fs');
 	//指定文件夹下面的所有js文件
-	['user','chat','follow'].forEach(function(dir){
-		fs.readdir(SOCKET+dir,function(err,files){
-			files.forEach(function(filename){
-				if (!/\.js$/.test(filename)) return;
-  				require(SOCKET+dir+"/"+filename)(socket,user);
+	fs.readdir(SOCKET,function(err,dirs){
+		dirs.forEach(function(dir){
+			fs.readdir(SOCKET+dir,function(err,files){
+				files.forEach(function(filename){
+					if (!/\.js$/.test(filename)) return;
+	  				require(SOCKET+dir+"/"+filename)(socket,user);
+				});
 			});
 		});
 	});

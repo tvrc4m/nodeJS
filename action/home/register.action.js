@@ -15,5 +15,13 @@ Register.prototype.index=function(){
 }
 
 Register.prototype.sign=function(){
-	
+	var uname=this.req.body.uname,password=this.req.body.password;
+	if(!uname || !password){}
+	IUSER('user.register',{action:'sign.uname',uname:uname,pwd:password,repwd:password},function(res){
+		if(res==0){
+
+		}else{
+			this.req.user=res[0];
+		}
+	});
 }

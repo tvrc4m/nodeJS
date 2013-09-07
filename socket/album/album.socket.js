@@ -7,6 +7,11 @@ exports=module.exports=function(socket,user){
 		
 	});
 
+	//删除相册(包括里面的照片)
+	socket.on('album.del',function(data){
+
+	});
+
 	//往相册里添加照片
 	socket.on('album.photo.add',function(data){
 		
