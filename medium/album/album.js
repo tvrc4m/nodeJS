@@ -1,6 +1,7 @@
 
 exports.create=function(option,fn){
-
+	var name=option.name,description=option.description,ispublic=option.ispublic || 1;
+	
 }
 
 exports.del=function(option,fn){

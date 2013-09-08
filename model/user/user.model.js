@@ -9,7 +9,9 @@ exports.mysql=UserMysql;
 
 exports.sphinx=UserSphinx;
 
-
+/**
+	user{_id:mongoid,uname:string,realname:string,photo:string,sex:enum,workplace:string,professional:string,sign:string,provice:string,city:string,location:string}
+**/
 
 function UserMongo(){
 	model.mongodb.call(this);
@@ -18,8 +20,14 @@ function UserMongo(){
 
 UserMongo.prototype.__proto__=model.mongodb.prototype;
 
-UserMongo.prototype.getUserByUid=function(uid,fn){
-	this.get({'findOne':{uid:uid}},fn);
+UserMongo.prototype.addUser=function(data,fn){
+	var timestamp=new Date().getTime(),def={ltime:timestamp,score:USER_DEFAULT_SCORE};
+	this.query({insert:func.extend({},def,data)},fn);
+}
+
+UserMongo.prototype.getUserByUid=function(uid,fields,fn){
+	if(!fn && typeof fields=='function') fn=fields;
+	this.get({'findOne':{uid:uid},'fields':fields},fn);
 };
 
 UserMongo.prototype.getUserByUname=function(uname,fn){
@@ -38,10 +46,6 @@ UserMongo.prototype.findUsers=function(where,options,fn){
 	this.query({find:where,options:options},fn);
 }
 
-UserMongo.prototype.addUser=function(data,fn){
-	var timestamp=new Date().getTime(),def={ltime:timestamp,score:USER_DEFAULT_SCORE};
-	this.query({insert:func.extend({},def,data)},fn);
-}
 
 function UserRedis(){
 	console.log(2222);

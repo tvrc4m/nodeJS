@@ -41,17 +41,17 @@ MongoDB.prototype.query=function(params,fn){
 		for(param in params){
 			//if(Object.hasOwnProperty.call(collection,param)){
 				if(param=='findOne')
-					collection.findOne(params[param],params['fields']?params['fields']:{},params['options'],callback);
+					collection.findOne(params[param],params['fields']?params['fields']:{},params['option'],callback);
 				else if(param=='find')
-					collection.find(params[param],params['fields']?params['fields']:{},params['options']).toArray(callback);
+					collection.find(params[param],params['fields']?params['fields']:{},params['option']).toArray(callback);
 				else if(param=='insert')
-					collection.insert(params[param],params['options']?params['options']:{},callback);
+					collection.insert(params[param],params['option']?params['option']:{},callback);
 				else if(param=='update')
-					collection.update(params[param],params['set'],params['options']?params['options']:{},callback);
+					collection.update(params[param],params['set'],params['option']?params['option']:{},callback);
 				else if(param=='delete')
-					collection.remove(params[param],params['options']?params['options']:{},callback);
+					collection.remove(params[param],params['option']?params['option']:{},callback);
 				else if(param=='count')
-					collection.count(params[param],params['options']?params['options']:{},callback);
+					collection.count(params[param],params['option']?params['options']:{},callback);
 			//}
 		}
 	});
