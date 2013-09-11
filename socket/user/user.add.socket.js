@@ -6,5 +6,4 @@ exports=module.exports=function(socket,user){
 	socket.on('user.add.by.uname',function(data){
 
 	});
-		
 }

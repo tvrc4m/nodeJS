@@ -11,7 +11,7 @@ exports.redis=ChatMessageRedis;
 
 function ChatMessageMongo(){
 	model.mongodb.call(this);
-	this.table="user";
+	this.table="chat_message";
 };
 
 ChatMessageMongo.prototype.__proto__=model.mongodb.prototype;

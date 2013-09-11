@@ -12,7 +12,7 @@ exports.redis=ChatMessageUnreadRedis;
 
 function ChatMessageUnreadMongo(){
 	model.mongodb.call(this);
-	this.table="user";
+	this.table="chat_message_unread";
 };
 
 ChatMessageUnreadMongo.prototype.__proto__=model.mongodb.prototype;

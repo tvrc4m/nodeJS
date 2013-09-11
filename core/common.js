@@ -15,7 +15,7 @@ global.MU=function(name,fn){
 };
 
 global.MF=function(name,fn){
-	M('follow/'+name,fn);
+	M('friend/'+name,fn);
 };
 
 global.MC=function(name,fn){
@@ -27,6 +27,7 @@ global.I=function(name,option,fn){
 	path.exists(file,function(exists){
 		if(exists)
 			require(file)[option.action](option,fn);
+			//new (require(file))(option,fn,socket)[option.action]()
 		else
 			console.log('invoke error');
 	});

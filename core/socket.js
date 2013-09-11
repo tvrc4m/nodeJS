@@ -34,7 +34,7 @@ io.configure(function(){
 
 io.sockets.on('connection',function(socket){
 	var hs = socket.handshake,user=hs.user;
-	socket.join(user.uid);
+	socket.join(user._id);
 	var fs=require('fs');
 	//指定文件夹下面的所有js文件
 	fs.readdir(SOCKET,function(err,dirs){

@@ -21,5 +21,5 @@ exports.img=function(option,fn){
 }
 
 exports.voice=function(option,fn){
-
+	
 }

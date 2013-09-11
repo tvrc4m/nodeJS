@@ -49,6 +49,18 @@ MongoModel.prototype.set=function(params){
 	return params;
 }
 
+MongoModel.prototype.storeset=function(option){
+	if(!option['root'] && this.table)
+		option['root']=this.table;
+	else
+		throw 'this.table undifined';
+	return option;
+}
+
+MongoModel.prototype.gridfs=function(params,option,mode,fn){
+	this.db.gridfs(params,this.storeset(option),mode,fn);
+}
+
 
 function RedisModel(){
 

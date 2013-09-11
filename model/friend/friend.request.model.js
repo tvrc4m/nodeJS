@@ -42,7 +42,6 @@ FriendRequestMongo.prototype.findFriends=function(where,option,fn){
 	this.query({'find':where,'option':option},fn);
 }
 
-
 function FriendRequestRedis(){
 	console.log(2222);
 };

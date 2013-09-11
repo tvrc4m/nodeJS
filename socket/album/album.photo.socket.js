@@ -16,7 +16,7 @@ exports=module.exports=function(socket,user){
 	socket.on('album.photo.like',function(data){
 
 	});
-
+	
 	//照片评论
 	socket.on('album.photo.comment',function(data){
 		

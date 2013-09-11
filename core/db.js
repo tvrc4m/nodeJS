@@ -1,6 +1,8 @@
 
 var utils=require(CORE+"function.js");
 
+var mongodb=require('Mongodb');
+
 exports.mongodb=MongoDB;
 
 exports.redis=RedisDB;
@@ -22,7 +24,7 @@ function MongoDB(){
 MongoDB.prototype.__proto__=DB.prototype;
 
 MongoDB.prototype.connect=function(fn){
-	var client=require('mongodb').MongoClient;
+	var client=mongodb.MongoClient;
 	client.connect(MONGODB_URL,function(err,db){
 		if(err) throw err;
 		fn(db);
@@ -40,18 +42,15 @@ MongoDB.prototype.query=function(params,fn){
 		var callback=function(err,result){db.close();err?fn(0):fn(result);}
 		for(param in params){
 			//if(Object.hasOwnProperty.call(collection,param)){
-				if(param=='findOne')
-					collection.findOne(params[param],params['fields']?params['fields']:{},params['option'],callback);
-				else if(param=='find')
-					collection.find(params[param],params['fields']?params['fields']:{},params['option']).toArray(callback);
-				else if(param=='insert')
-					collection.insert(params[param],params['option']?params['option']:{},callback);
-				else if(param=='update')
-					collection.update(params[param],params['set'],params['option']?params['option']:{},callback);
-				else if(param=='delete')
-					collection.remove(params[param],params['option']?params['option']:{},callback);
-				else if(param=='count')
-					collection.count(params[param],params['option']?params['options']:{},callback);
+				switch(param){
+					case 'findOne':collection.findOne(params[param],params['fields']?params['fields']:{},params['option'],callback);break;
+					case 'find':collection.find(params[param],params['fields']?params['fields']:{},params['option']).toArray(callback);break;
+					case 'insert':collection.insert(params[param],params['option']?params['option']:{},callback);break;
+					case 'update':collection.update(params[param],params['set'],params['option']?params['option']:{},callback);break;
+					case 'delete':collection.remove(params[param],params['option']?params['option']:{},callback);break;
+					case 'count':collection.count(params[param],params['option']?params['options']:{},callback);break;
+					//case '':
+				}
 			//}
 		}
 	});
@@ -59,6 +58,36 @@ MongoDB.prototype.query=function(params,fn){
 
 MongoDB.prototype.close=function(db){
 	db.close();
+}
+
+MongoDB.prototype.gridfs=function(params,option,mode,fn){
+	this.connect(function(db){
+		var store=new mongodb.GridStore(db,option['_id'] || new mongodb.ObjectId(),option['file'] || null,mode,option);
+		var wcallabck=function(err,store){store.close(err,file){err?fn(0):fn(file);db.close();}};
+		var callback=function(err,res){db.close();err?fn(0):fn(res);};
+		store.open(function(err,store){
+			if(err) throw err;
+			for(var param in params){
+				switch(param){
+					case 'write':store.write(params['write'],true,wcallabck);break;
+					case 'writeFile':store.writeFile(params['writeFile'],wcallabck);break;
+					case 'delete':store.unlink(function(err,res){err?fn(0):fn(1);});break;
+					case 'read':store.read(callback);break;
+					case 'stream':fn(store.stream(true));break;
+					//case 'exist':
+				}
+			}
+		})
+	});
+}
+
+MongoDB.prototype.store=function(file_id,table,fn){
+	this.connect(function(db){
+		mongodb.GridStore.exist(db,file_id,table,function(err,res){
+			if(err && res!=true) fn(0);
+			else fn(1);
+		});
+	})
 }
 
 function RedisDB(){

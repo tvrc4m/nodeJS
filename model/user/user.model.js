@@ -22,7 +22,7 @@ UserMongo.prototype.__proto__=model.mongodb.prototype;
 
 UserMongo.prototype.addUser=function(data,fn){
 	var timestamp=new Date().getTime(),def={ltime:timestamp,score:USER_DEFAULT_SCORE};
-	this.query({insert:func.extend({},def,data)},fn);
+	this.query({'insert':func.extend({},def,data)},fn);
 }
 
 UserMongo.prototype.getUserByUid=function(uid,fields,fn){
@@ -31,19 +31,19 @@ UserMongo.prototype.getUserByUid=function(uid,fields,fn){
 };
 
 UserMongo.prototype.getUserByUname=function(uname,fn){
-	this.get({findOne:{uname:uname}},fn);
+	this.get({'findOne':{uname:uname}},fn);
 }
 
 UserMongo.prototype.getUserByPhone=function(phone,fn){
-	this.get({findOne:{phone:phone}},fn);
+	this.get({'findOne':{phone:phone}},fn);
 }
 
 UserMongo.prototype.updateUserByUid=function(uid,data,fn){
-	this.query({'update':{uid:uid},'set':data,'options':{}},fn);
+	this.query({'update':{uid:uid},'set':data,'option':{}},fn);
 };
 
-UserMongo.prototype.findUsers=function(where,options,fn){
-	this.query({find:where,options:options},fn);
+UserMongo.prototype.findUsers=function(where,option,fn){
+	this.query({'find':where,'option':option},fn);
 }
 
 
@@ -73,7 +73,7 @@ UserMysql.prototype.on('update.user.info',function(uid){
 
 function UserSphinx(){
 	model.sphinx.call(this);
-	this._index='tbcatindex';
+	this.index='tbcatindex';
 }
 
 UserSphinx.prototype.__proto__=model.sphinx.prototype;

@@ -10,7 +10,7 @@ exports.redis=ChatMessageImgRedis;
 
 function ChatMessageImgMongo(){
 	model.mongodb.call(this);
-	this.table="user";
+	this.table="chat_message_img";
 };
 
 ChatMessageImgMongo.prototype.__proto__=model.mongodb.prototype;
