@@ -1,5 +1,4 @@
 var model=require(CORE+'model.js');
-var func=require(CORE+'function.js');
 
 exports.mongodb=UserNoticeMongo;
 
@@ -19,7 +18,7 @@ UserNoticeMongo.prototype.__proto__=model.mongodb.prototype;
 
 UserNoticeMongo.prototype.addUserNotice=function(uid,data,fn){
 	var def={ctime:new Date().getTime(),status:0};
-	this.query({'update':{_id:uid},'set':{$addToSet:func.extend({},def,data)}},fn);
+	this.query({'update':{_id:uid},'set':{$addToSet:MERGE({},def,data)}},fn);
 }
 
 UserNoticeMongo.prototype.getUserNotices=function(uid,option,fn){

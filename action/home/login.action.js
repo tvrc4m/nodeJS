@@ -25,6 +25,7 @@ Login.prototype.validate=function(){
 	}else{
 		IUSER('user.login',{action:'uname',uname:uname,password:password},function(result){
 			self.req.session.user=result;
+			console.log(result);
 		});
 	}
 }

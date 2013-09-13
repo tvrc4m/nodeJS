@@ -1,6 +1,4 @@
 
-var utils=require(CORE+"function.js");
-
 var mongodb=require('Mongodb');
 
 exports.mongodb=MongoDB;
@@ -63,7 +61,7 @@ MongoDB.prototype.close=function(db){
 MongoDB.prototype.gridfs=function(params,option,mode,fn){
 	this.connect(function(db){
 		var store=new mongodb.GridStore(db,option['_id'] || new mongodb.ObjectId(),option['file'] || null,mode,option);
-		var wcallabck=function(err,store){store.close(err,file){err?fn(0):fn(file);db.close();}};
+		var wcallabck=function(err,store){store.close(function(err,file){err?fn(0):fn(file);db.close();})};
 		var callback=function(err,res){db.close();err?fn(0):fn(res);};
 		store.open(function(err,store){
 			if(err) throw err;
@@ -154,7 +152,7 @@ MysqlDB.prototype.query=function(params,fn){
 
 MysqlDB.prototype._set=function(params){
 	this.init();
-	params=utils.extend({},this.params,params);
+	params=MERGE({},this.params,params);
 	for(var param in params){
 		//if(!Object.hasOwnProperty.call(this.link,param)) throw '不存在此属性，可能有待添加';
 		//this.params[param]=params['param'];

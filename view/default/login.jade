@@ -1,7 +1,8 @@
 extends window
 
 block content
-	form(action='/?app=login&act=validate',method='POST')
+	//form(action='/?app=login&act=validate',method='POST')
+	form
 		div
 			label email
 			input.text(type="text",name="uname")
@@ -9,5 +10,5 @@ block content
 			lable password
 			input.text(type="password",name="password")
 		div
-			input.button(type="submit",value="submit")
+			input.button(type="button",value="submit",onclick="LoginBtn(this)")
 

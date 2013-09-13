@@ -1,5 +1,4 @@
 var model=require(CORE+'model.js');
-var func=require(CORE+'function.js');
 
 exports.mongodb=UserMongo;
 
@@ -22,7 +21,7 @@ UserMongo.prototype.__proto__=model.mongodb.prototype;
 
 UserMongo.prototype.addUser=function(data,fn){
 	var timestamp=new Date().getTime(),def={ltime:timestamp,score:USER_DEFAULT_SCORE};
-	this.query({'insert':func.extend({},def,data)},fn);
+	this.query({'insert':MERGE({},def,data)},fn);
 }
 
 UserMongo.prototype.getUserByUid=function(uid,fields,fn){

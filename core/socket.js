@@ -33,16 +33,17 @@ io.configure(function(){
 });
 
 io.sockets.on('connection',function(socket){
+	global.SOCKET=socket;
 	var hs = socket.handshake,user=hs.user;
 	socket.join(user._id);
 	var fs=require('fs');
 	//指定文件夹下面的所有js文件
-	fs.readdir(SOCKET,function(err,dirs){
+	fs.readdir(SOCKETS,function(err,dirs){
 		dirs.forEach(function(dir){
-			fs.readdir(SOCKET+dir,function(err,files){
+			fs.readdir(SOCKETS+dir,function(err,files){
 				files.forEach(function(filename){
 					if (!/\.js$/.test(filename)) return;
-	  				require(SOCKET+dir+"/"+filename)(socket,user);
+	  				require(SOCKETS+dir+"/"+filename)(socket,user);
 				});
 			});
 		});

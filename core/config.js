@@ -7,7 +7,7 @@ global.MEDIUM=ROOT+"/medium/";
 
 global.ACTION=ROOT+"/action/";
 
-global.SOCKET=ROOT+"/socket/";
+global.SOCKETS=ROOT+"/socket/";
 
 global.VIEW=ROOT+"/view/";
 
@@ -20,6 +20,8 @@ global.APP_THEME="default";
 global.SESSION_SECRET="tvrc4m.yicker";
 
 global.SESSION_KEY="yicker";
+
+global.COOKIE_OPTION={maxAge:3600*24*30,httpOnly:true,path:'/',secure:true,domain:'.yicker.cn'}
 
 global.DEFAULT_GROUP="home";
 

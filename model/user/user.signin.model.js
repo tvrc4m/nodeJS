@@ -1,5 +1,4 @@
 var model=require(CORE+'model.js');
-var func=require(CORE+'function.js');
 
 exports.mongodb=UserSigninMongo;
 
@@ -19,7 +18,7 @@ UserSigninMongo.prototype.__proto__=model.mongodb.prototype;
 
 UserSigninMongo.prototype.addUserSignin=function(data,fn){
 	var def={ctime:new Date().getTime()};
-	this.query({insert:func.extend({},def,data)},fn);
+	this.query({insert:MERGE({},def,data)},fn);
 }
 
 UserSigninMongo.prototype.getUserSignins=function(uid,option,fn){

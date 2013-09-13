@@ -1,5 +1,15 @@
 var path=require('path');
 
+global.MERGE=function(target){
+	var sources = [].slice.call(arguments, 1);
+    sources.forEach(function (source) {
+        for (var prop in source) {
+            target[prop] = source[prop];
+        }
+    });
+    return target;
+}
+
 global.M=function(name,fn){
 	var file=MODEL+name.toLocaleLowerCase()+".model.js";
 	path.exists(file,function(exists){
@@ -37,10 +47,17 @@ global.IUSER=function(name,option,fn){
 	I('user/'+name,option,fn);
 }
 
-global.S=function(req,name,value){
-	req.session[name]=value;
+global.S=function(name,value){
+	if(value) REQ.session[name]=value;
+	else return REQ.session[name];
 };
 
-global.C=function(){
-	
+global.SU=function(userinfo){
+	REQ.session.user=userinfo;
+}
+
+global.C=function(name,value,option){
+	var option=MERGE({},COOKIE_OPTION,option);
+	if(value) REQ.cookie(name,value,option);
+	else return REQ.cookies[name];
 };

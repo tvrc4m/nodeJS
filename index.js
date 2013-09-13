@@ -51,6 +51,8 @@ app.configure(function() {
 
 app.all('*',function(req,res,next){
   if(/socket\.io/.test(req.route.path)) next();
+  global.REQ=req;
+  global.RES=res;
   var group=req.query.group || req.body.group || DEFAULT_GROUP;
   var action=req.query.app || req.body.app || DEFAULT_ACTION;
   var method=req.query.act || req.body.act || DEFAULT_METHOD;
