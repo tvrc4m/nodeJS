@@ -1,6 +1,7 @@
 
 var mongodb=require('Mongodb'),
 	mysql=require('mysql'),
+	redis=require('redis'),
 	sphinx=require('sphinxapi');
 
 exports.mongodb=MongoDB;
@@ -96,13 +97,23 @@ function RedisDB(){
 
 RedisDB.prototype.__proto__=DB.prototype;
 
-RedisDB.prototype.connect=function(){
-	redis = require('redis');
-	this.link=redis.createClient(REDIS_PORT,REDIS_HOST);
-	//TODO::this.link.auth();
-	util=require('utils');
-	util.merge(this,this.link.prototype);
+var commands=[];
+//TODO::为何for in循环却不行呢，而需要用forEach,
+for(var command in redis.RedisClient.prototype){
+	commands.push(command);
+	//RedisDB.prototype[command]=function(args,fn){
+	//	var client=redis.createClient(REDIS_PORT,REDIS_HOST);
+	//	client[command](args,fn);
+	//};
 }
+
+var redisClient=redis.createClient(REDIS_PORT,REDIS_HOST);
+
+commands.forEach(function(command){
+	RedisDB.prototype[command]=function(args,fn){
+		redisClient[command](args,fn);
+	};
+});
 
 function MysqlDB(){
 	this.pool=[];

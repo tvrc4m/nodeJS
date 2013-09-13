@@ -18,6 +18,7 @@ function Model(){
 Model.prototype.__proto__=EventEmitter.prototype;
 
 function MongoModel(){
+	Model.call(this);
 	this.db=new db.mongodb();
 }
 
@@ -63,10 +64,17 @@ MongoModel.prototype.gridfs=function(params,option,mode,fn){
 
 
 function RedisModel(){
+	Model.call(this);
+}
 
+RedisModel.prototype.__proto__=Model.prototype;
+
+for(var command in db.redis.prototype){
+	RedisModel.prototype[command]=db.redis.prototype[command];
 }
 
 function MysqlModel(){
+	Model.call(this);
 	this.db=new db.mysql();
 }
 
@@ -99,6 +107,7 @@ MysqlModel.prototype.set=function(params){
 }
 
 function SphinxModel(){
+	Model.call(this);
 	this.db=db.sphinx;
 }
 

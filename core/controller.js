@@ -4,6 +4,9 @@ exports=module.exports=Controller;
 function Controller(req,res){
 	this.req=req;
 	this.res=res;
+	this.title='';
+	this.keyword='';
+	this.description='';
 	this.data={};
 	this.init();
 }
@@ -18,12 +21,14 @@ Controller.prototype.display=function(name,fn){
 		this.res.render(name,this.data,function(err,html){
 			if(fn) fn(html);
 		});
-	else
+	else{
+		this.assign({pageTitle:this.title,pageKeyword:this.keyword,pageDescription:this.description});
 		this.res.render(name,this.data);
+	}
 }
 
-Controller.prototype.assign=function(name,value){
-	this.data.name=value;
+Controller.prototype.assign=function(data){
+	this.data=MERGE(this.data,data);
 }
 
 	

@@ -47,8 +47,10 @@ UserMongo.prototype.findUsers=function(where,option,fn){
 
 
 function UserRedis(){
-	console.log(2222);
+	model.redis.call(this);
 };
+
+UserRedis.prototype.__proto__=model.redis.prototype;
 
 function UserMysql(){
 	this.table='ft_cat';
