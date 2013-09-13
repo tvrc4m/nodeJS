@@ -1,5 +1,7 @@
 
-var mongodb=require('Mongodb');
+var mongodb=require('Mongodb'),
+	mysql=require('mysql'),
+	sphinx=require('sphinxapi');
 
 exports.mongodb=MongoDB;
 
@@ -110,8 +112,7 @@ function MysqlDB(){
 MysqlDB.prototype.__proto__=DB.prototype;
 
 MysqlDB.prototype.connect=function(fn){
-	var mysql=require('mysql');
-	this.pool=mysql.createPool({host:MYSQL_HOST,port:MYSQL_PORT,database:MYSQL_DB,user:MYSQL_USER,password:MYSQL_PASSWORD});
+	this.pool=mysql.createPool(MYSQL_URL);
 	this.pool.getConnection(function(err, connection) {
 	  	if(err) throw err;
 	  	this.link=connection;
@@ -188,7 +189,7 @@ var queries=[];
 
 function SphinxDB(){
 	DB.call(this);
-	this.link=new require('sphinxapi')()();
+	this.link=new sphinx()();
 }
 
 SphinxDB.prototype.__proto__=DB.prototype;

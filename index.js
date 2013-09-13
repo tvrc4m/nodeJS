@@ -4,6 +4,9 @@ global.ROOT=__dirname;
 
 require('./core/config.js');
 require("./core/common.js");
+require('./core/function.js');
+require('./core/db.js');
+require('./core/model.js');
 
 var express = require('express')
   , http = require('http')
@@ -91,11 +94,19 @@ global.server=exports.server = https.createServer(options,app).listen(app.get('p
   console.log('Balloons.io started on port %d', app.get('port'));
 });
 */
+
+/*
+  init global
+*/
+
+require('./core/init.js');
+
 /*
  * Socket.io
  */
 
 require('./core/socket');
+
 
 /*
  * Catch uncaught exceptions

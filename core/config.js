@@ -29,15 +29,7 @@ global.DEFAULT_ACTION="index";
 
 global.DEFAULT_METHOD="index";
 
-global.MYSQL_HOST="127.0.0.1";
-
-global.MYSQL_PORT=3306;
-
-global.MYSQL_DB="fastty";
-
-global.MYSQL_USER="root";
-
-global.MYSQL_PASSWORD='';
+global.MYSQL_URL='mysql://root:@localhost:3306/fastty';
 
 global.MONGODB_URL="mongodb://localhost:27017/fastty";//'mongodb://fastty2013:fastty2013mongodb@localhost:27017/fastty';
 
