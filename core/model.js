@@ -99,7 +99,7 @@ MysqlModel.prototype.set=function(params){
 }
 
 function SphinxModel(){
-	this.db=new db.sphinx();
+	this.db=db.sphinx;
 }
 
 SphinxModel.prototype.__proto__=Model.prototype;

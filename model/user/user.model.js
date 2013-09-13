@@ -72,11 +72,16 @@ UserMysql.prototype.on('update.user.info',function(uid){
 
 function UserSphinx(){
 	model.sphinx.call(this);
-	this.index='tbcatindex';
+	this.index='cdsindex';
 }
 
 UserSphinx.prototype.__proto__=model.sphinx.prototype;
 
 UserSphinx.prototype.getUser=function(sign,fn){
 	this.add(sign);
+}
+
+UserSphinx.prototype.findUsers=function(sign,data,where,sort,page,limit){
+	var params={_index:this.index,_filters:where,_offset:page,_limit:limit};
+	this.add(sign,data,params);
 }

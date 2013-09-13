@@ -9,7 +9,7 @@ exports.redis=RedisDB;
 
 exports.mysql=MysqlDB;
 
-exports.sphinx=SphinxDB;
+exports.sphinx=new SphinxDB();	//只实例化一次,保证是singletone模式
 
 function DB(){
 	this.link=null;
@@ -189,7 +189,7 @@ var queries=[];
 
 function SphinxDB(){
 	DB.call(this);
-	this.link=new sphinx()();
+	this.link=new sphinx();
 }
 
 SphinxDB.prototype.__proto__=DB.prototype;
@@ -209,7 +209,7 @@ SphinxDB.prototype.init=function(){
 	this.link._groupfunc		= this.link.SPH_GROUPBY_DAY;
 	this.link._groupsort		= '@group desc';
 	this.link._groupdistinct	= '';
-	this.link._maxmatches	= 3000;
+	this.link._maxmatches	= 1000;
 	this.link._cutoff		= 0;
 	this.link._retrycount	= 0;
 	this.link._retrydelay	= 0;
@@ -227,7 +227,6 @@ SphinxDB.prototype.init=function(){
 SphinxDB.prototype.run=function(fn){
 	this.link.RunQueries(function(err, data){
 		var results={};
-		console.log(data);
 		for(var key in data) results[queries[key]]=data[key];
 		fn(results);
 	});
