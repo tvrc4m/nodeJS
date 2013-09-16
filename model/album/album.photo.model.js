@@ -30,6 +30,11 @@ AlbumPhotoMongo.prototype.getAlbumPhoto=function(album_id,option,fn){
 	this.find({'find':{album_id:ablum_id},'option':option},fn);
 }
 
+//删除照片
+AlbumPhotoMongo.prototype.delPhoto=function(_id,fn){
+	this.query({'delete':{_id:_id}},fn);
+}
+
 function AlbumPhotoRedis(){
 	console.log(2222);
 };

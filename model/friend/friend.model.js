@@ -18,7 +18,7 @@ FriendMongo.prototype.__proto__=model.mongodb.prototype;
 
 FriendMongo.prototype.addUserFriend=function(uid,data,fn){
 	var def={_id:uid,ctime:new Date().getTime(),star:0,remark:'',friend_black:0,friend_view:1,chat_top:0,message_notice:1};
-	this.query({insert:MERGE({},def,data)},fn);
+	this.query({'insert':MERGE({},def,data)},fn);
 }
 
 FriendMongo.prototype.getUserFriends=function(uid,option,fn){

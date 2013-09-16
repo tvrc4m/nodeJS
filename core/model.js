@@ -113,10 +113,6 @@ function SphinxModel(){
 
 SphinxModel.prototype.__proto__=Model.prototype;
 
-SphinxModel.prototype.find=function(){
-	
-}
-
 SphinxModel.prototype.add=function(sign,data,params){
 	this.db.add(sign,data,params);
 }

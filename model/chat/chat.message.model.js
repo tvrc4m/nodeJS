@@ -28,7 +28,7 @@ ChatMessageMongo.prototype.listMessage=function(where,option,fn){
 ChatMessageMongo.prototype.searchMessage=function(uname,fn){
 	//TODO:未实现
 	var timespan=option.timespan || 0;
-	this.find({findOne:{uname:uname}},fn);
+	this.find({'findOne':{uname:uname}},fn);
 }
 
 function ChatMessageRedis(){

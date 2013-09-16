@@ -210,14 +210,14 @@ SphinxDB.prototype.init=function(){
 	this.link._port			= 9312;
 	this.link._offset		= 0;
 	this.link._limit			= 20;
-	this.link._mode			= this.link.SPH_MATCH_ALL;	
-	this.link._sort			= this.link.SPH_SORT_RELEVANCE;
+	this.link._mode			= sphinx.SPH_MATCH_ALL;	
+	this.link._sort			= sphinx.SPH_SORT_RELEVANCE;
 	this.link._sortby		= '';			
 	this.link._min_id		= 0;
 	this.link._max_id		= 0;
 	this.link._filters		= [];
 	this.link._groupby		= '';
-	this.link._groupfunc		= this.link.SPH_GROUPBY_DAY;
+	this.link._groupfunc		= sphinx.SPH_GROUPBY_DAY;
 	this.link._groupsort		= '@group desc';
 	this.link._groupdistinct	= '';
 	this.link._maxmatches	= 1000;
@@ -226,7 +226,7 @@ SphinxDB.prototype.init=function(){
 	this.link._retrydelay	= 0;
 	this.link._anchor		= {};
 	this.link._indexweights	= {};
-	this.link._ranker		= this.link.SPH_RANK_PROXIMITY_BM25;
+	this.link._ranker		= sphinx.SPH_RANK_PROXIMITY_BM25;
 	this.link._rankexpr		= '';
 	this.link._maxquerytime	= 0;
 	this.link._timeout		= 1.0;
@@ -256,8 +256,4 @@ SphinxDB.prototype.add=function(sign,data,params){
 	}else if(typeof(data)=='string') 
 		query=data;
 	this.link.AddQuery(query);
-}
-
-SphinxDB.prototype.resetParams=function(param,fn){
-
 }

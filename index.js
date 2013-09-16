@@ -20,13 +20,8 @@ var express = require('express')
  * Instantiate redis
  */
 
-if (process.env.REDISTOGO_URL) {
-  var rtg   = require('url').parse(process.env.REDISTOGO_URL);
-  var client = exports.client  = redis.createClient(rtg.port, rtg.hostname);
-  client.auth(rtg.auth.split(':')[1]); // auth 1st part is username and 2nd is password separated by ":"
-} else {
-  var client = exports.client  = redis.createClient();
-}
+var client = exports.client  = redis.createClient(REDIS_PORT,REDIS_HOST);
+//client.auth(rtg.auth.split(':')[1]);
 
 var sessionStore = exports.sessionStore = new RedisStore({client: client});
 

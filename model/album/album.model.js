@@ -27,6 +27,10 @@ AlbumMongo.prototype.updateAlbum=function(_id,data,fn){
 	this.query({'update':{_id:_id}},{$set:data},fn);
 }
 
+AlbumMongo.prototype.delAlbum=function(_id,fn){
+	this.query({'delete':{_id:_id}},fn);
+}
+
 function AlbumRedis(){
 	console.log(2222);
 };
