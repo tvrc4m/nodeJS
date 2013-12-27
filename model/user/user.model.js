@@ -1,5 +1,5 @@
 var model=require(CORE+'model.js');
-
+var util=require('util');
 exports.mongodb=UserMongo;
 
 exports.redis=UserRedis;
@@ -50,8 +50,20 @@ function UserRedis(){
 	model.redis.call(this);
 };
 
+
 UserRedis.prototype.__proto__=model.redis.prototype;
 
+UserRedis.prototype.getUser=function(uid,fn){
+	this.hgetall(util.format(this.map.user_info,uid),function(err,data){
+		fn(data);
+	});
+}
+
+UserRedis.prototype.setUser=function(userinfo,fn){
+	this.hmset(util.format(redis_keys.user_info,userinfo._id),userinfo,function(err,res){
+		fn(res);
+	})
+}
 function UserMysql(){
 	this.table='ft_cat';
 	model.mysql.call(this);

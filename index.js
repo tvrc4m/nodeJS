@@ -33,9 +33,11 @@ var app = exports.app = express();
 
 app.configure(function() {
   app.set('port', process.env.PORT || APP_PORT || 6789);
-  app.set('view engine', 'jade'); 
+  // app.set('view engine', 'jade'); 
+  app.set('view engine', 'html'); 
+  app.engine('.html', require('ejs').__express);
   app.set('views', VIEW+ APP_THEME);
-  app.use(express.static(STATIC));
+  // app.use(express.static(STATIC));//使用Ngix处理静态请求
   app.use(express.bodyParser());
   app.use(express.cookieParser(SESSION_SECRET));
   app.use(express.session({
@@ -54,7 +56,6 @@ app.all('*',function(req,res,next){
   var group=req.query.group || req.body.group || DEFAULT_GROUP;
   var action=req.query.app || req.body.app || DEFAULT_ACTION;
   var method=req.query.act || req.body.act || DEFAULT_METHOD;
-  
   var file=ACTION+group+"/"+action+".action.js";
   path.exists(file,function(exists){
     if(exists){

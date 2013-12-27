@@ -1,0 +1,51 @@
+
+<div class="callout" style="display: none" id="sign_popupdiv">
+  <form id="formsign" method="post" action="/register/callback.html">
+    <div class="call_login clearfix">
+      <div class="login_tip">亲，你可以用快推网络帐号登录，也可以使用第三方帐号直接登录哦！</div>
+      <ul class="login_box fl">
+        <li>
+          <label class="labeltit">登录昵称</label>
+          <input type="text" placeholder="请填写昵称" id="uname" name="u">
+          <span></span>
+        </li>
+        <li>
+          <label class="labeltit">登录密码</label>
+          <input type="password" placeholder="填写登录密码" id="password" name="p">
+          <span></span>
+        </li>
+        <li>
+        <li>
+          <label class="labeltit">确认密码</label>
+          <input type="password" placeholder="确认登录密码" id="password2" name="rep">
+          <span></span>
+        </li>
+        <li>
+        <li>
+          <label class="labeltit">邮箱</label>
+          <input type="text" placeholder="确认邮箱" id="email" name="e">
+          <span></span>
+        </li>
+        <li>
+          <input type="button" id="signbtn" class="btn btn-success" value="注 册" />
+          <a class="linkblue" id="hassign" href="javascript:void(0);">已有帐户？</a>
+        </li>
+      </ul>
+      <!--
+      <ul class="social_box fr">
+        <li>
+          <a class="btn" target='_blank' href=""> <i class="icon ico_sina"></i>
+            用微博帐号登录
+          </a>
+        </li>
+        <li>
+          <a class="btn" target='_blank' href="">
+            <i class="icon ico_qq"></i>
+            用QQ帐号登录
+          </a>
+        </li>
+      </ul>
+    -->
+    </div>
+  </form>
+</div>

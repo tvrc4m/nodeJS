@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>提示</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="/Static/default/css/dialog.css" type="text/css" />
+  <script type="text/javascript" src="/Static/default/js/jquery.js"></script>
+  <script type="text/javascript" src="/Static/artDialog/artDialog.js"></script>
+  <script type="text/javascript" src="/Static/default/js/common.js"></script>
+  <script type="text/javascript" src="/Static/box/js/share.js"></script>
+</head>
+<body class="dalogbg">
+  <script type="text/javascript">
+    successTip('{$msg}');
+  </script>
+</body>
+</html>

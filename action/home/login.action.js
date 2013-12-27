@@ -11,7 +11,8 @@ function Login(req,res){
 Login.prototype.__proto__=controller.prototype;
 
 Login.prototype.index=function(){
-	this.display('login');
+	this.seo();
+	this.display('login/index');
 }
 
 Login.prototype.validate=function(){
@@ -28,4 +29,9 @@ Login.prototype.validate=function(){
 			console.log(result);
 		});
 	}
+}
+
+Login.prototype.seo=function(){
+	this.title="登录";
+	this.keyword="登录";
 }

@@ -1,0 +1,6 @@
+{
+	"user":{
+		"_id"		:		"mongoid"		,
+		"field"		:		"type"		default value,
+	}
+}

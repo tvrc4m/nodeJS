@@ -11,7 +11,7 @@ global.SOCKETS=ROOT+"/socket/";
 
 global.VIEW=ROOT+"/view/";
 
-global.STATIC=ROOT+"/static/";
+global.STATIC=ROOT+"/static/default/";
 
 global.APP_PORT=6789;
 
@@ -31,7 +31,7 @@ global.DEFAULT_METHOD="index";
 
 global.MYSQL_URL='mysql://root:@localhost:3306/fastty';
 
-global.MONGODB_URL="mongodb://localhost:27017/fastty";//'mongodb://fastty2013:fastty2013mongodb@localhost:27017/fastty';
+global.MONGODB_URL="mongodb://localhost:27017/yicker";//'mongodb://fastty2013:fastty2013mongodb@localhost:27017/fastty';
 
 global.REDIS_HOST="127.0.0.1";
 

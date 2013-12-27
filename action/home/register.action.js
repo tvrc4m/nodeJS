@@ -11,7 +11,7 @@ function Register(req,res){
 Register.prototype.__proto__=controller.prototype;
 
 Register.prototype.index=function(){
-	this.display('register');
+	this.display('register/index');
 }
 
 Register.prototype.sign=function(){

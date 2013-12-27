@@ -1,0 +1,48 @@
+  <!--header-->
+  {if empty($smarty.session.UID)}
+      {assign var="nologin" value="display:none"}
+  {/if}
+  <div id="header">
+    <div class="wrapper">
+      <div class="nav_bar fl">
+        <a class="nav_home  {$top_box}" href="{$smarty.const.HOST}/"><span>首页</span></a>
+        <a class="nav_home {$top_coupon}" href="/cu/"><span>促销</span></a>
+        <a class="nav_home {$top_cat}" href="/cat/"><span>类别</span></a>
+        <a class="nav_home {$top_brand}" href="/brand/"><span>品牌</span></a>
+        <a class="nav_home {$top_seller}" href="/seller/"><span>商城</span></a>
+        <a class="nav_home {$top_discover}" href="/discover/"><span>发现</span></a>
+        <a class="nav_home" target="_blank" title="购物客，中国第一家购物搜索联盟。现已收录当当、卓越、京东、新蛋、红孩子、DHC、玛萨玛索、VANCL、金象网等国内最具品质的B2C商家，致力于向广大消费者提供最便捷的网购入口、让用户轻松找到低价正品。" href="http://fastty.gouwuke.com?from=www.fastty.com"><span>购物客</span></a>
+      </div>
+      <div class="menu_bar fr">
+        {top}
+          {if !empty($smarty.session.UID)}
+            <ul class="rmenus">
+              <!--
+              <li id="menu_notification" class="dropdown">
+                <a href="#menu_notification" class="dropdown-toggle msbtn hasms">2</a>
+              </li>
+              -->
+              <li id="menu_settings" class="dropdown">
+                <a href="/my" class="usercenter iavtar">
+                  <img class="avtar32 fl" src="{$smarty.const.DEFAULT_HEADIMG_PATH}{$smarty.session.UID}{$smarty.session.HEADIMG}" onerror="defaultImg(this)" />
+                </a>
+              </li>
+            </ul>
+          {/if}
+        {/top}
+      </div>
+    </div>
+    <div class="common-search dib has-history">
+    <form class="search-form s-focus" method="GET" action="/s/">
+      <div class="s-ipt-container">
+        <input class="searchbox-input" accesskey="s" type="search" autocomplete="off" name="q" value="" placeholder="有 搜 即 有 得" maxlength="512" data-autofocus="autofocus" />  
+      </div>
+      <div class="s-btn-container">
+        <a href="javascript:void(0);" class="btn-search btn-orange btn-size40 search-btn" onclick="document.getElementById('formsearch').submit();">搜索</a>
+      </div>
+    </form>
+
+  </div>
+
+  </div>
+  <!--end header-->

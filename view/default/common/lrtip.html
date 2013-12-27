@@ -1,0 +1,19 @@
+{lrtip}
+  {if empty($smarty.session.UID)}
+    <div class="callout">
+        <div class="tiplogin clearfix">
+          <p class="fl">亲，您还没有登录快推网哦！<span class="rb">注册即可得3元!</span></p>
+          <div class="sociallg fr">
+            <span>您可以用第三方帐号快速登录！</span>
+            <a href="/login/sina"><i class="icon ico_small_sina"></i></a>
+            <a href="/login/qq"><i class="icon ico_small_qq"></i></a>
+            <a href="/login/taobao"><i class="icon ico_small_tb"></i></a>
+          </div>
+          <div class="rbox">
+            <a class="btn btn-success btn-large" href="{$smarty.const.HOST}/register.html">快速注册帐号</a>
+            <a class="btn btn-large" href="{$smarty.const.HOST}/login.html">登录</a>
+          </div>
+       </div>
+    </div>
+  {/if}
+{/lrtip}

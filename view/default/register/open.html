@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录注册</title>
+<link type="text/css" rel="stylesheet" href="/Static/default/css/register.css" />
+<link type="text/css" rel="stylesheet" href="/Static/default/css/dialog.css" />
+</head>
+<body class="unlog">
+<div id="page">
+  <div class="wraper wraper800">
+    <div class="header_nologin clearfix">
+      <div class="logobox fl">
+        <a href=""><img src="/Static/images/logo3.png"></a>
+      </div>
+      <div class="rbox"><span>已有{$smarty.const.SITE_NAME}帐号？</span>
+        <a class="btn btn-primary bind" href="javascript:void(0);" onclick="bind()">马上绑定</a>
+      </div>
+    </div>
+    <div class="inner inner_nologin clearfix">
+      <div class="login_tip">亲，填写信息30秒快速完成注册，也可以使用第三方帐号更快捷的注册登录哦！</div>
+      <form method="post" name="form1" id="form1" action="">
+        <input type="hidden" id="ot" value="{$smarty.session.TYPE}" />
+        <ul class="sign_box fl">
+          <li>
+            <label class="labeltit">帐户昵称</label>
+            <input type="text" placeholder="帐户昵称" id="uname" name="uname" value="{$smarty.session.OPEN_UNAME}" />      
+            <span id="unameTip"></span>
+          </li>
+          <li>
+            <label class="labeltit">填写邮箱</label>
+            <input type="text" placeholder="常用邮箱" id="email" name="email" />      
+            <span id="emailTip"></span>
+          </li>
+          <li>
+            <label class="labeltit">填写密码</label>
+            <input type="password" placeholder="至少6个字符的字母与数字组合" id="p" name="p" />      
+            <span id="password1Tip"></span>
+          </li>
+          <li>
+            <label class="labeltit">重复填写密码</label> 
+            <input type="password" placeholder="重复填写密码" id="rep" name="rep" />      
+            <span id="password2Tip"></span>
+          </li>
+          <li>
+            <a class="btn btn-success" href="javascript:void(0);" onclick="return sign()">确认注册</a>
+            <span>
+            已有快推网帐号？
+            <a class="linkblue" href="javascript:void(0);" onclick="bind()">立即绑定</a>
+          </span>
+        </li>
+      </ul>
+      </form>
+    </div>
+     <div class="callout" style="display: none" id="bind_popupdiv">
+       <div class="call_login clearfix">
+         <div class="login_tip">
+           亲，
+           <span class="error_tip hide"></span>
+           你可以绑定现有的{$smarty.const.SITE_NAME}帐户哦！
+         </div>
+         <ul class="login_box fl">
+           <li>
+             <label class="labeltit">绑定帐户</label>
+             <input type="text" placeholder="请填写昵称" id="uname" name="u">     
+             <span class=""></span>
+           </li>
+           <li>
+             <label class="labeltit">登录密码</label>
+             <input type="password" placeholder="填写登录密码" id="password" name="p">     
+             <span class=""></span>
+           </li>
+           <li>
+             <input type="button" id="bindbtn" class="btn btn-success" value="绑定帐户" />     
+             <a class="linkblue" href="#">忘记密码？</a>
+           </li>
+         </ul>
+       </div>
+     </div>
+  </div>
+</div>
+<script type="text/javascript" src="/Static/default/js/jquery.js"></script>
+<script type="text/javascript" src="/Static/artDialog/artDialog.js"></script>
+<script type="text/javascript" src="/Static/artDialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/Static/default/js/common.js"></script>
+{literal}
+  <script type="text/javascript">
+        function tip(span,text){
+          span.removeClass('ok error').addClass('tip').text(text);
+        };
+        function ok(span,text){
+          span.removeClass('tip error').addClass('ok').text(text);
+        };
+        function error(span,text){
+          span.removeClass('tip ok').addClass('error').text(text);
+        }
+        var existuname=1;
+        var existemail=1;
+        var guname='';
+        var gemail='';
+        var prep=0;
+        $id('uname').onblur=function(){
+          existuname=1;
+          var uname=this.value;
+          var span=$(this).siblings('span');
+          if(!uname || typeof(uname)=='undefined'){
+            tip(span,'');
+            return;
+          }
+          if(!/[\w]{2,}/.test(uname)){
+            tip(span,'');
+            return;
+          }
+          var f=function(data){
+            switch(data.ret){
+              case 1:ok(span,'');existuname=0;break;
+              case 0:tip(span,'来晚了,被人注册了');break;
+              case -1:tip(span,'');break;
+              case -2:error(span,'');break;
+            }
+          }
+          if(guname==uname){
+            return;
+          }
+          guname=uname;
+          jsonp('/register/uniqueName.html',{'u':uname},'',f);
+        };
+        $id('p').onblur=function(){
+          prep=0;
+          var pwd1=this.value;
+          var span=$(this).siblings('span');
+          if(!pwd1 || typeof(pwd1)=='undefined'){
+            tip(span,'');
+            return;
+          }
+          if(pwd1.length<6){
+            tip(span,'密码要大于6位');
+            return;
+          }
+          var pwd2=$id('rep').value;
+          if(pwd2.length>1 && pwd1!==pwd2){
+            $('#rep').siblings('span').removeClass('tip ok').addClass('error');
+          }else if(pwd2.length>1 && pwd1===pwd2){
+            $('#rep').siblings('span').removeClass('tip error').addClass('ok');
+            prep=1;
+          }
+
+          ok(span,'');
+        };
+        $id('rep').onblur=function(){
+          prep=0;
+          var pwd2=this.value;
+          var pwd1=$id('p').value;
+          var span=$(this).siblings('span');
+          if(!pwd2 || typeof(pwd2)=='undefined'){
+            tip(span,'');
+            return;
+          }
+          if(pwd1!==pwd2){
+            error(span,'');
+            prep=0;
+            return;
+          }
+          prep=1;
+          ok(span,'');
+        };
+        $id('email').onblur=function(){
+          existemail=1;
+          var email=this.value;
+          var span=$(this).siblings('span');
+          if(!email || typeof(email)=='undefined'){
+            tip(span,'');
+            return;
+          }
+          if(!/\w+@\w+\.\w+/.test(email)){
+            error(span,'');
+            return;
+          }
+          var f=function(data){
+            switch(data.ret){
+              case 1:ok(span,'');existemail=0;break;
+              case 0:tip(span,'邮箱已经注册过,如有疑问请联系管理员');break;
+              case -1:tip(span,'');break;
+              case -2:error(span,'');break;
+            }
+          }
+          if(email==gemail){
+            return;
+          }
+          gemail=email;
+          jsonp('/register/uniqueEmail.html',{'e':email},'',f);
+        };
+      function sign(jump,callback){
+        
+        var cf=function(res){
+          switch(res.ret){
+            case true:
+            case 1:tips("注册成功，即将跳转！",2);document.location.href="/guide/follow.html";break;
+
+            case -1:$id('uname').focus();$('#uname').siblings('span').removeClass('tip ok').addClass('error');break;
+
+            case -2:$id('email').focus();$('#email').siblings('span').removeClass('tip ok').addClass('error');break;
+
+            case -3:$id('rep').focus();$('#rep').siblings('span').removeClass('tip ok').addClass('error');break;
+
+          }
+          
+        };
+        var uname=$id('uname').value;
+        var pwd1=$id('p').value;
+        var pwd2=$id('rep').value;
+        var email=$id('email').value;
+          if(existuname){
+            $id('uname').focus();
+            return false;
+          }
+           if(existemail){
+            $id('email').focus();
+            return false;
+          }
+          if(!prep){
+            $id('rep').focus();
+            return false;
+          }
+          var data={'u':uname,'p':pwd1,'rep':pwd2,'e':email,'bind':1,'ot':iv('ot')};
+          jsonp('/registering.html',data,'',cf);
+          return false;
+        }
+      function bind(jump,callback){
+          var config={title:"绑定帐户",lock: true,opacity: 0.87,content: $('#bind_popupdiv').html()}
+          artdialog=this.dialog('',config);
+          var f=function(res){
+            switch(res.ret){
+              
+              case 1:artdialog.time(2);tiplog=tips("绑定成功，即将跳转！",2);document.location.href="/";break;
+
+              case -2:$('.error_tip').html('帐户或密码错误，').show();break;//帐户或密码错误
+
+              case -3:$('.error_tip').html('绑定失败,请重试！').show();break;//绑定失败
+
+            }
+            
+          };
+          $id('bindbtn').onclick=function(e){
+            var uname=iv('uname');
+            var password=iv('password');
+            if(!uname || typeof(uname)=='undefined'){
+              $id('uname').focus();
+              return;
+            }
+            if(!password || typeof(password)=='undefined'){
+              $id('password').focus();
+              return;
+            }
+            var data={'u':uname,'p':password};
+            post("/login/bind.html",data,'',f);
+          };
+        };
+
+      $(document).ready(function() {
+        $('#uname').trigger('blur');
+      });
+  </script>
+{/literal}
+</body>
+</html>
