@@ -4,6 +4,7 @@ exports=module.exports=function(socket,user){
 	
 	//登录
 	socket.on('user.login',function(data){
+		 
 		call_user_login('uname',data,function(res){
 			//if(res==0) 
 		});

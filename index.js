@@ -13,8 +13,9 @@ var express = require('express')
   //,https=require('https')
   , redis = require('redis')
   , RedisStore = require('connect-redis')(express)
-  , path=require('path')
-  //, fs=require('fs');
+  , path = require('path')
+  , domain = require('domain')
+  , fs = require('fs');
 
 /*
  * Instantiate redis
@@ -45,6 +46,18 @@ app.configure(function() {
     store: sessionStore
   }));
   app.use(app.router);
+  app.use(function(req,res,next){
+    var d = domain.create();
+    //监听domain的错误事件
+    d.on('error', function (err) {
+      res.statusCode = 500;
+      res.json({sucess:false, messag: '服务器异常'});
+      d.dispose();
+    });
+    d.add(req);
+    d.add(res);
+    d.run(next);
+  });
 });
 
 /**单入口路由**/
@@ -103,12 +116,13 @@ require('./core/init.js');
 
 require('./core/socket');
 
-
+var f_error_log=fs.createWriteStream(error_log,{flags:'a'});
 /*
  * Catch uncaught exceptions
  */
 
 process.on('uncaughtException', function(err){
-  console.log('Exception: ' + err.stack);
+//   //console.log('Exception: ' + err.stack);
+  f_error_log.write('Exception: '+err.stack+'\n');
 });
 

@@ -54,7 +54,7 @@ function UserRedis(){
 UserRedis.prototype.__proto__=model.redis.prototype;
 
 UserRedis.prototype.getUser=function(uid,fn){
-	this.hgetall(util.format(this.map.user_info,uid),function(err,data){
+	this.hgetall(util.format(redis_keys.user_info,uid),function(err,data){
 		fn(data);
 	});
 }
@@ -86,13 +86,13 @@ UserMysql.prototype.on('update.user.info',function(uid){
 
 function UserSphinx(){
 	model.sphinx.call(this);
-	this.index='cdsindex';
+	this.index='ftitemindex';
 }
 
 UserSphinx.prototype.__proto__=model.sphinx.prototype;
 
-UserSphinx.prototype.getUser=function(sign,fn){
-	this.add(sign);
+UserSphinx.prototype.getUser=function(sign,data,params,fn){
+	this.add(sign,data,params);
 }
 
 UserSphinx.prototype.findUsers=function(sign,data,where,sort,page,limit){

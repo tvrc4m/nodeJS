@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= pageTitle %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="<%= pageKeyword %>" />
+    <meta name="description" content="<%= pageDescription %>" />
+    <meta property="qc:admins" content="056127767762715633" />
+    <link type="text/css" rel="stylesheet" href="/static/default/css/home.css" />
+    <link type="text/css" rel="stylesheet" href="/static/default/css/dialog.css"  />
+    <script type="text/javascript" src="/static/default/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/default/js/common.js"></script>
+</head>
+<body>
+    <div id="page">
+        <div id="header">
+            <div class="wrapper">
+                <div class="nav_bar fl">
+                    <a class="nav_home onfocus" href="<%= global.APP_PORT %>/">
+                        <span>首页</span>
+                    </a>
+                    <a class="nav_home" href="/cu/">
+                        <span>促销</span>
+                    </a>
+                    <a class="nav_home {$top_cat}" href="/cat/"><span>类别</span></a>
+                    <a class="nav_home" href="/brand/">
+                        <span>品牌</span>
+                    </a>
+                    <a class="nav_home {$top_seller}" href="/seller/">
+                        <span>商城</span>
+                    </a>
+                    <a class="nav_home" href="/discover/">
+                        <span>发现</span>
+                    </a>
+                    <a class="nav_home" target="_blank" title="购物客，中国第一家购物搜索联盟。现已收录当当、卓越、京东、新蛋、红孩子、DHC、玛萨玛索、VANCL、金象网等国内最具品质的B2C商家，致力于向广大消费者提供最便捷的网购入口、让用户轻松找到低价正品。" href="http://fastty.gouwuke.com?from=www.fastty.com"><span>购物客</span></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="wraper wraper1200">
+
+            <div class="ft-content clearfix">
+
+                <div class="search-category">
+                    <div class="J_Navigation hp-channel-category">
+                        <h3 class="hp-cc-menu">
+                            分类导航 <i class="iconfont category-arrow"></i>
+                        </h3>
+                        <div class="J_HpNav hp-nav">
+                            <div class="product-category">
+                                <ul class="pc-main J_PCMain">
+                                    {foreach from=$topcat item=top}
+                                    <li class="pc-items J_PCItem clearfix">
+                                        <h3 class="pc-cate-title">
+                                            <a class="pc-category yahei" href="/cat/{$top['cid']}/list/" target="_blank" title="{$top['name']}">{$top['name']}</a>
+                                        </h3>
+                                        <p class="pc-subcategory">
+                                            {foreach from=$top['subcat'] item=sub}
+                                                <a class="pc-subcategory-item" href="/cat/{$sub['cid']}/list/" target="_blank" title="{$sub['name']}">{$sub['name']}</a>
+                                            {/foreach}
+                                        </p>
+                                    </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {lrtip}
+                  {if empty($smarty.session.UID)}
+                        <div class="tiplogin clearfix">
+                          <p class="fl">亲，您还没有登录快推网哦</p>
+                          <div class="sociallg fr">
+                            <span>您可以用第三方帐号快速登录！</span>
+                            <a href="/login/sina"><i class="icon ico_small_sina"></i></a>
+                            <a href="/login/qq"><i class="icon ico_small_qq"></i></a>
+                            <a href="/login/taobao"><i class="icon ico_small_tb"></i></a>
+                          </div>
+                          <div class="rbox">
+                            <a class="btn btn-success btn-large" href="{$smarty.const.HOST}/register.html">快速注册帐号</a>
+                            <a class="btn btn-large" href="{$smarty.const.HOST}/login.html">登录</a>
+                          </div>
+                       </div>
+                  {/if}
+                {/lrtip}
+                 <div class="common-search dib has-history">
+
+                     <form class="search-form s-focus" method="GET" action="/s/">
+                         <div class="s-menu">
+                             <ul class="s-menu-list">
+                                 <li class="selected">
+                                     <a target="_self" href="javascript:void(0);">淘宝返利</a>
+                                 </li>
+                             </ul>
+                         </div>
+                         <div class="s-ipt-container">
+                             <input class="searchbox-input" accesskey="s" type="search" autocomplete="off" name="q" value="" placeholder="有 搜 即 有 得" maxlength="512" data-autofocus="autofocus" />       
+                         </div>
+                         <div class="s-btn-container">
+                             <a href="javascript:void(0);" class="btn btn-orange btn-size40 search-btn" onclick="document.getElementById('formsearch').submit();">搜索</a>
+                         </div>
+                         <div class="searchHot searchshow">
+                             <a href="/s/?q=雪纺衫" target="_blank">雪纺衫</a>
+                             <a href="/s/?q=连衣裙" target="_blank">连衣裙</a>
+                             <a href="/s/?q=简约t恤" target="_blank">简约t恤</a>
+                             <a href="/s/?q=洞洞鞋" target="_blank">洞洞鞋</a>
+                             <a href="/s/?q=清凉短裤" target="_blank">清凉短裤</a>
+                             <a href="/s/?q=新品凉鞋" target="_blank">新品凉鞋</a>
+                         </div>
+                     </form>
+
+                 </div>
+                <div class="sign">
+                    <div class="sign-wrap clearfix">
+                        <div class="sign-user">
+                            {if !empty($smarty.session.USERINFO)}
+                                <a href="/my/setting/#头像设置" target="_blank">
+                                    <div class="sign-icon-wrap">
+                                        <img class="sign-user-icon" src="/static/images/headimg/{$smarty.session.UID}{$smarty.session.HEADIMG}" onerror="defaultImg(this)" alt="" />
+                                    </div>
+                                </a>
+                                <p class="sign-user-info">
+                                    <span class="sign-user-name">{$smarty.session.UNAME}</span>
+                                </p>
+                            {else}
+                                <a href="/my/setting/" target="_blank">
+                                    <div class="sign-icon-wrap">
+                                        <img class="sign-user-icon" src="/static/images/icon/homeavatar.png" alt="求真相" />
+                                    </div>
+                                </a>
+                                <p class="sign-user-info">欢迎访问快推网络</p>
+                            {/if}
+                            <p class="sign-tips">
+                                我们是做比价返利服务的,通过我们可以省钱。
+                            </p>
+                        </div>
+
+                        <div id="jifen" class="sign-module">
+                            <div id="J_SignIn" class="sign-in" onclick="getCoin(this)">
+                                签到领快推币
+                            </div>
+                            <div class="J_AddPoint sign-point">+20</div>
+                            <div class="J_SignMsg sign-msg">您已经签过到了</div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="feeds">
+                        <div class="content-category">
+                            <ul class="cc-items clear-fix">
+                                <li class="cc-list-item cc-item-selected" onclick="homeTj(this,'#todaytj')">
+                                    <a class="cc-feed cc-nav">今日推荐</a>
+                                </li>
+                                 <li class="cc-list-item" onclick="homeTj(this,'#cu99')">
+                                    <a class="cc-feed cc-nav">9.9包邮</a>
+                                </li>
+                                 <li class="cc-list-item" onclick="homeTj(this,'#todayfx')">
+                                    <a class="cc-feed cc-nav">热销单品</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="contenttj">
+                            <div id="todaytj" class="content-pannel">
+                                <ul class="content-items clear-fix">
+                                    <li data-category="all" class="list-item current-item" onclick="homeCatTj(this,0)">
+                                        <a>全部分类</a>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,1)">
+                                        <span>服装内衣</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,2)">
+                                        <span>鞋包配饰</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,3)">
+                                        <span>美容护肤</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,4)">
+                                        <span>数码家电</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,5)">
+                                        <span>母婴用品</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,6)">
+                                        <span>家居建材</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,7)">
+                                        <span>日用百货</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,8)">
+                                        <span>汽车车品</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCatTj(this,9)">
+                                        <span>户外娱乐</span>
+                                    </li>
+                                </ul>
+                                <ul class="cp-list mailfree-pannel homecattj_0 clear-fix">
+                                    {foreach from=$todaycatrecommand item=today}
+                                        <li class="cp-item">
+                                            <div class="item-pic lazyImage">
+                                                <a href="/shop/item/detail/{$today['id']}/" target="_blank" class="item-pic-a">
+                                                    <img lazyurl="{$today['pic']}_180x180" alt="{$today['title']}" title="{$today['title']}" src="/static/images/icon/tloading.gif" />
+                                                </a>
+                                            </div>
+                                            <h3 class="item-title">
+                                                <a title="{$today['title']}" target="_blank" href="/shop/item/detail/{$today['id']}/">{$today['title']}</a>
+                                            </h3>
+                                            <div class="price">原价：{number_format($today['price'],1)}元</div>
+                                            <div class="now-price">
+                                                返利
+                                                <span class="rmb">&nbsp;¥</span> <em>{number_format($today['commission']*$smarty.const.TB_TICHENG,1)}</em>
+                                            </div>
+                                        </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                            <div id="cu99" class="content-pannel hide">
+                                 <ul class="content-items clear-fix">
+                                    <li data-category="all" class="list-item current-item" onclick="homeCu99(this,0)">
+                                        <a>全部分类</a>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,1)">
+                                        <span>服装内衣</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,2)">
+                                        <span>鞋包配饰</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,3)">
+                                        <span>美容护肤</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,4)">
+                                        <span>数码家电</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,5)">
+                                        <span>母婴用品</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,6)">
+                                        <span>家居建材</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,7)">
+                                        <span>日用百货</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,8)">
+                                        <span>汽车车品</span>
+                                    </li>
+                                    <li class="list-item" onclick="homeCu99(this,9)">
+                                        <span>户外娱乐</span>
+                                    </li>
+                                </ul>
+                                <ul class="cp-list mailfree-pannel cu99_0 clear-fix">
+                                    {foreach from=$cu99items item=cuitem}
+                                        <li class="cp-item">
+                                            <div class="item-pic lazyImage">
+                                                <a href="/shop/item/detail/{$cuitem['id']}/" class="item-pic-a">
+                                                    <img  lazyurl="{$cuitem['pic']}_180x180" alt="{$cuitem['title']}" title="{$cuitem['title']}" src="/static/images/icon/tloading.gif" />
+                                                </a>
+                                            </div>
+                                            <h3 class="item-title">
+                                                <a title="{$cuitem['title']}" target="_blank" href="/shop/item/detail/{$cuitem['id']}/">{$cuitem['title']}</a>
+                                            </h3>
+                                            <div class="old-price">原价：{number_format($cuitem['price'],1)}元</div>
+                                            <div class="now-price">
+                                                优惠价
+                                                <span class="rmb">&nbsp;¥</span> <em>{number_format($cuitem['cprice'],1)}</em>
+                                            </div>
+                                        </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                            <div id="todayfx" class="content-pannel hide">
+                                <div id="brix_brick_153">
+                                    <div>
+                                        <div class="feed-page">
+                                            {foreach from=$saleitems item=sale}
+                                                <div class="feed">
+                                                    <div class="grid-c">
+                                                        <div class="module feed11">
+                                                            <div class="feed-hd">
+                                                                <s class="feed-tag"></s>
+                                                                <h3 class="feed-title">
+                                                                    <a href="/shop/item/detail/{$sale['id']}/">
+                                                                        {$sale['title']}
+                                                                    </a>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="feed-img feed-img-180 lazyImage">
+                                                                <a href="/shop/item/detail/{$sale['id']}/" class="feedimglist" target="_blank" title="{$sale['title']}">
+                                                                    {foreach from=$sale['imgs'] item=img}
+                                                                       <img alt="{$sale['title']}" lazyurl="{$img}_180x180.jpg" alt="{$sale['title']}" title="{$sale['title']}" src="/static/images/icon/tloading.gif" />
+                                                                    {/foreach}
+                                                                    <div class="feed-price-wrap">
+                                                                        <span class="feed-item-price">{number_format($sale['price'],2)}</span>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="feed-act">
+                                                        
+                                                    </div>
+                                                </div>
+                                            {/foreach}
+                                        </div>
+                                    </div>
+                                    <div id="J_FeedPagination" class="pagination" data-max="11" data-maxfeed="307">
+                                        <div class="feeds-loading" data-finished="true">正在加载...</div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fixed-modules mod-wrap">
+                    <div class="J_fixedPlaceHolder" style=""></div>
+                    <div class="J_ModuleFixed">
+                        <div class="fixed-wrap">
+                            <div class="ks-switchable-fixed">
+                                <div class="mod hot-rebate fixed-mod2">
+                                    <div class="hd clearfix">
+                                        <h3>
+                                            <span class="ir">热门商家</span>
+                                        </h3>
+
+                                        <a class="more dib" href="/seller/" title="更多品牌商城" target="_blank">更多</a>
+
+                                    </div>
+                                    <div class="bd">
+                                        <ul class="hot-rebate-list dib-wrap">
+                                            {foreach from=$tjseller item=seller}
+                                                <li class="dib">
+                                                    <a href="/seller/{$seller['id']}/" target="_blank">
+                                                        <img class="animated" src="{$seller['logo']}" style="width:60px;height:45px" alt="{$seller['name']}"></a>
+                                                    <p class="hot-rebate-info">
+                                                        <a href="/seller/{$seller['id']}/" target="_blank" title="{$seller['name']}">【{$seller['name']}】<p>{$seller['commission']}</p>
+                                                        </a>
+                                                    </p>
+                                                </li>
+                                            {/foreach}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mod hot-quan fixed-mod1">
+                                    <div class="hd clearfix">
+                                        <h3>
+                                            <span class="ir">天猫活动</span>
+                                        </h3>
+                                    </div>
+                                    <div class="bd">
+                                        <ul class="hot-quan-list">
+                                            <li class="hot-quan-item" style="float:left">
+                                                <iframe width="100" height="100" src="http://www.taobao.com/go/rgn/union/link_temai.php?size=100x100&pid=mm_30522148_0_0" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" name="alimamaifrm"></iframe>
+                                            </li>
+                                            <li class="hot-quan-item" style="float:left">
+                                               <iframe width="100" height="100" src="http://www.taobao.com/go/rgn/union/link_tmall.php?size=100x100&pid=mm_30522148_0_0" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" name="alimamaifrm"></iframe>
+                                            </li>
+                                            <li class="hot-quan-item" style="float:left">
+                                               <iframe width="100" height="100" src="http://www.taobao.com/go/rgn/union/link_3c.php?size=100x100&pid=mm_30522148_0_0" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" name="alimamaifrm"></iframe>
+                                            </li>
+                                             <li class="hot-quan-item" style="float:left">
+                                              <a target="_blank" href="http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQiRddrP0zSSy1paiMpyZR9yIba9DElvyVvyP0nD83GAO0%2BKxQoP2tO%2BLcEG8nY6qAYRnrZ1Pg0oArMVvO51lCK8k%2BnpUlQ5mDyNyx4%3D&amp;pid=mm_30522148_0_0">
+                                                 <img style="width:100px;height:100px" title="天猫母婴特卖" src="http://img01.taobaocdn.com/imgextra/i1/95656259/T2_GYpXXhaXXXXXXXX_!!95656259.jpg">           
+                                               </a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <div class="mod hot-quan fixed-mod1">
+                                    <div class="hd clearfix">
+                                        <h3>
+                                            <span class="ir">热门优惠券</span>
+                                        </h3>
+                                    </div>
+                                    <div class="bd">
+                                            <ul class="hot-quan-list">
+                                                <li class="hot-quan-item ">
+                                                    <a target="_blank" href="http://p.yiqifa.com/s?sid=ce4dc8cfaceafb2e&pid=346821&wid=660018&vid=412844&cid=7058&lid=195220&euid=&vwid=">
+                                                        <img width="190" height="105" alt="醉品商城优惠券" src="/static/seller/img/quan/zuipin.png">
+                                                    </a>
+                                                </li>
+                                                <li class="hot-quan-item ">
+                                                    <a target="_blank" href="http://p.yiqifa.com/s?sid=bee048a6a29f6f79&pid=346821&wid=660018&vid=396214&cid=7048&lid=209361&euid=&vwid=">
+                                                        <img width="190" height="105" alt="要红酒优惠券" src="/static/seller/img/quan/hongjiu.png">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                    </div>
+                                </div>
+                                <!--
+                                <div id="J_SliderBanner" class="mod banner-slider  fixed-mod3 ">
+                                    <ul class="clearfix ks-switchable-banner" style="position: absolute; width: 1140px; left: 0px;">
+                                        <li class="banner-slider-item ks-switchable-panel-internal445" style="display: block; float: left;">
+                                            <a href="" title="">
+                                                <img src="" alt=""></a>
+                                        </li>
+                                        
+                                    </ul>
+                                    <span class="banner-tips">
+                                        <i class="J_CurrentBanner current-banner">1</i>
+                                        /4
+                                    </span>
+                                    <a class="iconfont banner-slider-trigger banner-slider-prev" title="上一页">Ɠ</a>
+                                    <a class="iconfont banner-slider-trigger banner-slider-next" title="下一页">ƒ</a>
+                                </div>
+                                -->                         
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/static/default/js/jsrender.min.js"></script>
+{literal}
+<script type="text/x-jsrender" id="cattjtemplate">
+    <ul class="cp-list mailfree-pannel homecattj_{{:cid}} clear-fix">
+         {{for value}}
+            <li class="cp-item">
+                <div class="item-pic lazyImage">
+                    <a href="/shop/item/detail/{{:id}}/" target="_blank" class="item-pic-a">
+                        <img lazyurl="{{:pic}}_180x180.jpg" alt="{{:title}}" title="{{:title}}" src="/static/images/icon/tloading.gif" />    
+                    </a>
+                </div>
+                <h3 class="item-title">
+                    <a title="{{:title}}" target="_blank" href="/shop/item/detail/{{:id}}/">{{:title}}</a>
+                </h3>
+                <div class="price">原价：{{:price}}元</div>
+                <div class="now-price">
+                    返利
+                    <span class="rmb">&nbsp;¥</span> <em>{{:commission}}</em>
+                </div>
+            </li>
+        {{/for}}
+    </ul>
+</script>
+<script type="text/x-jsrender" id="cu99template">
+    <ul class="cp-list mailfree-pannel cu99_{{:cid}} clear-fix">
+        {{for value}}
+            <li class="cp-item">
+                <div class="item-pic lazyImage">
+                    <a href="/shop/item/detail/{{:id}}/" class="item-pic-a">
+                        <img  lazyurl="{{:pic}}_180x180.jpg" alt="{{:title}}" title="{{:title}}" src="/static/images/icon/tloading.gif" />        
+                    </a>
+                </div>
+                <h3 class="item-title">
+                    <a title="{{:title}}" target="_blank" href="/shop/item/detail/{{:id}}/">{{:title}}</a>
+                </h3>
+                <div class="old-price">原价：{{:price}}元</div>
+                <div class="now-price">
+                    优惠价
+                    <span class="rmb">&nbsp;¥</span> <em>9.9</em>
+                </div>
+            </li>
+        {{/for}}
+    </ul>
+</script>
+<script type="text/javascript">
+    function homeTj(that,content){
+        $(that).siblings().removeClass('cc-item-selected');
+        $(that).addClass('cc-item-selected');
+        $('#contenttj').children('div').hide();
+        $(content).show();
+        lazyload.init();
+    }
+    function homeCatTj(that,cid){
+        $(that).siblings().removeClass('current-item');
+        $(that).addClass('current-item');
+        var ulcat="homecattj_"+cid,ulcatcls="."+ulcat;
+        if($(that).parent().siblings('ul').hasClass(ulcat)){
+            $(ulcatcls).siblings('.cp-list').hide();
+            $(ulcatcls).show();
+            lazyload.init();
+        }else{
+            get("/home/cat/tj/",{cid:cid},'',function(data){
+                var html=$('#cattjtemplate').render(data);
+                $("#todaytj").append(html);
+                $(ulcatcls).siblings('.cp-list').hide();
+                $(ulcatcls).show();
+                lazyload.init();
+            });
+        }  
+    }
+    function homeCu99(that,cid){
+        $(that).siblings().removeClass('current-item');
+        $(that).addClass('current-item');
+        var ulcat="cu99_"+cid,ulcatcls="."+ulcat;
+        if($(that).parent().siblings('ul').hasClass(ulcat)){
+            $(ulcatcls).siblings('.cp-list').hide();
+            $(ulcatcls).show();
+            lazyload.init();
+        }else{
+            get("/home/cu99/tj/",{cid:cid},'',function(data){
+                var html=$('#cu99template').render(data);
+                $("#cu99").append(html);
+                $(ulcatcls).siblings('.cp-list').hide();
+                $(ulcatcls).show();
+                lazyload.init();
+            });
+        }
+    }
+</script>
+{/literal}
+{include file="Common/footer.tpl"}

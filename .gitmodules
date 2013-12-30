@@ -1,0 +1,3 @@
+[submodule "node_modules/sphinxapi"]
+	path = node_modules/sphinxapi
+	url = https://github.com/touv/node-sphinxapi.git

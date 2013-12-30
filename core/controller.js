@@ -23,7 +23,6 @@ Controller.prototype.display=function(name,fn){
 		});
 	else{
 		this.assign({pageTitle:this.title,pageKeyword:this.keyword,pageDescription:this.description});
-		console.log(this.data);
 		this.res.render(name,this.data);
 	}
 }

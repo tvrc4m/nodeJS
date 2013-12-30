@@ -43,13 +43,14 @@ MongoDB.prototype.query=function(params,fn){
 		var callback=function(err,result){db.close();err?fn(0):fn(result);}
 		for(param in params){
 			//if(Object.hasOwnProperty.call(collection,param)){
+				var options=params['option']?params['option']:{};
 				switch(param){
-					case 'findOne':collection.findOne(params[param],params['fields']?params['fields']:{},params['option'],callback);break;
-					case 'find':collection.find(params[param],params['fields']?params['fields']:{},params['option']).toArray(callback);break;
-					case 'insert':collection.insert(params[param],params['option']?params['option']:{},callback);break;
-					case 'update':collection.update(params[param],params['set'],params['option']?params['option']:{},callback);break;
-					case 'delete':collection.remove(params[param],params['option']?params['option']:{},callback);break;
-					case 'count':collection.count(params[param],params['option']?params['options']:{},callback);break;
+					case 'findOne':collection.findOne(params[param],params['fields']?params['fields']:{},options,callback);break;
+					case 'find':collection.find(params[param],params['fields']?params['fields']:{},options).toArray(callback);break;
+					case 'insert':collection.insert(params[param],options,callback);break;
+					case 'update':collection.update(params[param],params['set'],options,callback);break;
+					case 'delete':collection.remove(params[param],optionscallback);break;
+					case 'count':collection.count(params[param],options,callback);break;
 					//case '':
 				}
 			//}
@@ -97,17 +98,13 @@ function RedisDB(){
 
 RedisDB.prototype.__proto__=DB.prototype;
 
+var redisClient=redis.createClient(REDIS_PORT,REDIS_HOST);
+
 var commands=[];
 //TODO::为何for in循环却不行呢，而需要用forEach,
 for(var command in redis.RedisClient.prototype){
 	commands.push(command);
-	//RedisDB.prototype[command]=function(args,fn){
-	//	var client=redis.createClient(REDIS_PORT,REDIS_HOST);
-	//	client[command](args,fn);
-	//};
 }
-
-var redisClient=redis.createClient(REDIS_PORT,REDIS_HOST);
 
 commands.forEach(function(command){
 	RedisDB.prototype[command]=function(args,fn){
@@ -210,14 +207,14 @@ SphinxDB.prototype.init=function(){
 	this.link._port			= 9312;
 	this.link._offset		= 0;
 	this.link._limit			= 20;
-	this.link._mode			= sphinx.SPH_MATCH_ALL;	
+	this.link._mode			= sphinx.SPH_MATCH_EXTENDED2;	
 	this.link._sort			= sphinx.SPH_SORT_RELEVANCE;
 	this.link._sortby		= '';			
 	this.link._min_id		= 0;
 	this.link._max_id		= 0;
 	this.link._filters		= [];
 	this.link._groupby		= '';
-	this.link._groupfunc		= sphinx.SPH_GROUPBY_DAY;
+	this.link._groupfunc		= sphinx.SPH_GROUPBY_ATTR;
 	this.link._groupsort		= '@group desc';
 	this.link._groupdistinct	= '';
 	this.link._maxmatches	= 1000;
@@ -233,9 +230,11 @@ SphinxDB.prototype.init=function(){
 	this.link._fieldweights	= {};
 	this.link._overrides		= {};
 	this.link._select		= '*';
+	this.link._index		= '*';
 }
 
 SphinxDB.prototype.run=function(fn){
+
 	this.link.RunQueries(function(err, data){
 		var results={};
 		for(var key in data) results[queries[key]]=data[key];
@@ -248,11 +247,12 @@ SphinxDB.prototype.add=function(sign,data,params){
 	queries.push(sign);
 	for(param in params){
 		if(!Object.hasOwnProperty.call(this.link,param)) throw '请检查此属性是否存在';
-		this[param]=params[param];
+		this.link[param]=params[param];
 	}
 	var query='';
 	if(typeof(data)=='object'){
-		for(var key in data) data[key] || query+=!key?' '+data[key]+' ':' '+key+' '+data[key]+' ';
+		for(var key in data) 
+			if(data[key]) query+=!key?' '+data[key]+' ':' '+key+' '+data[key]+' ';
 	}else if(typeof(data)=='string') 
 		query=data;
 	this.link.AddQuery(query);

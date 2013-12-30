@@ -38,3 +38,5 @@ global.REDIS_HOST="127.0.0.1";
 global.REDIS_PORT=6379;
 
 global.USER_DEFAULT_SCORE=100;	//注册时的默认积分值
+
+global.error_log="/var/log/yicker.js.log";
